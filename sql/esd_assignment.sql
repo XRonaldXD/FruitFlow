@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1:3306
--- 產生時間： 2025-04-22 12:54:18
+-- 產生時間： 2025-04-22 13:40:55
 -- 伺服器版本： 8.2.0
 -- PHP 版本： 8.2.13
 
@@ -40,7 +40,16 @@ CREATE TABLE IF NOT EXISTS `borrowing` (
   KEY `fruit_id` (`fruit_id`),
   KEY `to_shop_id` (`to_shop_id`),
   KEY `from_shop_id` (`from_shop_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- 傾印資料表的資料 `borrowing`
+--
+
+INSERT INTO `borrowing` (`borrow_id`, `from_shop_id`, `to_shop_id`, `fruit_id`, `quantity`, `borrow_date`, `status`) VALUES
+(1, 3, 1, 2, 100, '2025-04-26', 'Pending'),
+(2, 4, 1, 1, 500, '2025-04-29', 'Pending'),
+(3, 1, 1, 3, 250, '2025-04-30', 'Pending');
 
 -- --------------------------------------------------------
 
