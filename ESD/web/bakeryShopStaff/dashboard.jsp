@@ -50,7 +50,7 @@
                     <a href="../ViewStock?shopId=<jsp:getProperty name="user" property="shopId"/>" class="btn btn-primary">View Stock</a>
                     <a href="../ReserveFruitsHandler?action=view" class="btn btn-success">Reserve Fruits</a>
                     <a href="../BorrowFruitsHandler?action=view" class="btn btn-warning">Borrow Fruits</a>
-                    <a href="viewReservations.jsp" class="btn btn-info">View Reservations</a>
+                    <a href="../ViewReservations" class="btn btn-info">View Reservations</a>
                     <a href="updateStock.jsp" class="btn btn-secondary">Update Stock Levels</a>
                 </div>
             </div>

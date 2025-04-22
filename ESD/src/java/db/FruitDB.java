@@ -102,6 +102,25 @@ public class FruitDB {
         return shopStocks;
     }
 
+    public String getFruitNameById(int fruitId) {
+        String fruitName = null;
+        String sql = "SELECT fruit_name FROM fruits WHERE fruit_id = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, fruitId); // Set the fruitId parameter
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                fruitName = rs.getString("fruit_name"); // Get the fruit name
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return fruitName; // Return the fruit name or null if not found
+    }
+
     public int getCityId(int shopId) {
         int cityId = -1; // Default value if no city is found
         String sql = "SELECT city_id FROM shops WHERE shop_id = ?";

@@ -4,11 +4,14 @@
  */
 package bean;
 
+import db.FruitDB;
+
 /**
  *
  * @author user
  */
 public class Reservation {
+
     private int reservationId;
     private int fruitId;
     private int shopId;
@@ -17,7 +20,8 @@ public class Reservation {
     private String status; // e.g., "Pending", "Approved"
 
     // Constructors
-    public Reservation() {}
+    public Reservation() {
+    }
 
     public Reservation(int reservationId, int fruitId, int shopId, int quantity, String reservationDate, String status) {
         this.reservationId = reservationId;
@@ -28,22 +32,69 @@ public class Reservation {
         this.status = status;
     }
 
+    public String getFruitName() {
+        FruitDB fruitDB = new FruitDB("jdbc:mysql://localhost:3306/esd_assignment", "root", "");
+        return fruitDB.getFruitNameById(this.fruitId); // Fetch fruitName using fruitId
+    }
+
     // Getters and Setters
-    public int getReservationId() { return reservationId; }
-    public void setReservationId(int reservationId) { this.reservationId = reservationId; }
+    public int getReservationId() {
+        return reservationId;
+    }
 
-    public int getFruitId() { return fruitId; }
-    public void setFruitId(int fruitId) { this.fruitId = fruitId; }
+    public void setReservationId(int reservationId) {
+        this.reservationId = reservationId;
+    }
 
-    public int getShopId() { return shopId; }
-    public void setShopId(int shopId) { this.shopId = shopId; }
+    public int getFruitId() {
+        return fruitId;
+    }
 
-    public int getQuantity() { return quantity; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public void setFruitId(int fruitId) {
+        this.fruitId = fruitId;
+    }
 
-    public String getReservationDate() { return reservationDate; }
-    public void setReservationDate(String reservationDate) { this.reservationDate = reservationDate; }
+    public int getShopId() {
+        return shopId;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public void setShopId(int shopId) {
+        this.shopId = shopId;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getReservationDate() {
+        return reservationDate;
+    }
+
+    public void setReservationDate(String reservationDate) {
+        this.reservationDate = reservationDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Reservation{"
+                + "reservationId=" + reservationId
+                + ", shopId=" + shopId
+                + ", fruitId=" + fruitId
+                + ", quantity=" + quantity
+                + ", reservationDate=" + reservationDate
+                + ", status='" + status + '\''
+                + '}';
+    }
 }
