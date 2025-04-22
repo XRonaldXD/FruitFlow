@@ -41,7 +41,7 @@ public class LoginHandler extends HttpServlet {
         boolean isValid = userDB.isValidUser(username, password);
         try (PrintWriter out = response.getWriter()) {
             if (isValid) {    //login
-                int role = userDB.getRole(username, password);
+                String role = userDB.getRole(username, password);
 
                 HttpSession session = request.getSession(true);
                 User bean = new User();
@@ -56,14 +56,14 @@ public class LoginHandler extends HttpServlet {
         }
     }
 
-    protected void doLogin(HttpServletRequest request, HttpServletResponse response, int role)
+    protected void doLogin(HttpServletRequest request, HttpServletResponse response, String role)
             throws ServletException, IOException {
 
         String targetURL = "login.jsp"; // Default to login page
 
-        if (role == 1) {
+        if (role.equals("BakeryShopStaff")) {
             targetURL = "/bakeryShopStaff/dashboard.jsp"; // Path for Bakery Shop Staff
-        } else if (role == 2) {
+        } else if (role.equals("WarehouseStaff")) {
             targetURL = "/warehouseStaff/dashboard.jsp"; // Path for Warehouse Staff
         } else {
             targetURL = "/login.jsp"; // Default to login page

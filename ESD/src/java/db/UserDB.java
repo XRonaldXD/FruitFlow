@@ -36,7 +36,7 @@ public class UserDB {
 
         try {
             conn = getConnection();
-            String preQueryStatement = "SELECT * FROM user WHERE username = ? AND password = ?;";
+            String preQueryStatement = "SELECT * FROM users WHERE username = ? AND password = ?;";
 
             pStmt = conn.prepareStatement(preQueryStatement);
 
@@ -67,16 +67,16 @@ public class UserDB {
         return result;
     }
 
-    public int getRole(String username, String password) {
+    public String getRole(String username, String password) {
         Connection conn = null;
         PreparedStatement pStmt = null;
         ResultSet rs = null;
 
-        int result = -1; // Default value if no user is found
+        String result = "-1"; // Default value if no user is found
 
         try {
             conn = getConnection(); // Ensure this method is implemented to return a valid DB connection
-            String preQueryStatement = "SELECT role FROM user WHERE username = ? AND password = ?";
+            String preQueryStatement = "SELECT role FROM users WHERE username = ? AND password = ?";
 
             pStmt = conn.prepareStatement(preQueryStatement);
             pStmt.setString(1, username);
@@ -85,7 +85,7 @@ public class UserDB {
             rs = pStmt.executeQuery();
 
             if (rs.next()) {
-                result = rs.getInt("role"); // Retrieve the 'role' column value
+                result = rs.getString("role"); // Retrieve the 'role' column value
             }
         } catch (SQLException ex) {
             ex.printStackTrace(); // Log the exception for debugging
@@ -111,7 +111,7 @@ public class UserDB {
         return result;
     }
 
-    public int createUser(String username, String email, String password, int role, Integer shopID) {
+    public int createUser(String username, String email, String password, String role, Integer shopID) {
         Connection conn = null;
         PreparedStatement pStmt = null;
         ResultSet generatedKeys = null; // To hold the generated keys
@@ -119,14 +119,14 @@ public class UserDB {
 
         try {
             conn = getConnection();
-            String sql = "INSERT INTO `user` (`username`, `email`, `password`, `role`, `shop_id`) VALUES (?, ?, ?, ?, ?);";
+            String sql = "INSERT INTO `users` (`username`, `email`, `password`, `role`, `shop_id`) VALUES (?, ?, ?, ?, ?);";
 
             pStmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); // Enable key retrieval
 
             pStmt.setString(1, username);
             pStmt.setString(2, email);
             pStmt.setString(3, password);
-            pStmt.setInt(4, role);
+            pStmt.setString(4, role);
 
             // Handle null for shopID
             if (shopID != null) {

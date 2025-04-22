@@ -46,7 +46,7 @@
             <div class="card-body">
                 <h3 class="card-title">Actions</h3>
                 <div class="d-grid gap-2">
-                    <a href="viewStock.jsp" class="btn btn-primary">View Stock Levels</a>
+                    <a href="./bakeryShopStaff/viewStock.jsp" class="btn btn-primary">View Stock Levels</a>
                     <a href="reserveFruits.jsp" class="btn btn-success">Reserve Fruits</a>
                     <a href="borrowFruits.jsp" class="btn btn-warning">Borrow Fruits</a>
                     <a href="viewReservations.jsp" class="btn btn-info">View Reservations</a>

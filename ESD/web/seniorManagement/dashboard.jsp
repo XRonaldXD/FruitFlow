@@ -1,15 +1,16 @@
 <%-- 
     Document   : dashboard
-    Created on : 2025年4月22日, 下午4:16:35
+    Created on : 2025年4月22日, 下午5:54:26
     Author     : user
 --%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bakery Shop Staff Dashboard</title>
+    <title>Senior Management Dashboard</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -17,7 +18,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Bakery Dashboard</a>
+            <a class="navbar-brand" href="#">Senior Management Dashboard</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -37,7 +38,7 @@
         <div class="card mb-4">
             <div class="card-body">
                 <h3 class="card-title">Welcome, <%= session.getAttribute("username") %>!</h3>
-                <p class="card-text">Role: Bakery Shop Staff</p>
+                <p class="card-text">Role: Senior Management</p>
             </div>
         </div>
 
@@ -46,11 +47,10 @@
             <div class="card-body">
                 <h3 class="card-title">Actions</h3>
                 <div class="d-grid gap-2">
-                    <a href="./bakeryShopStaff/viewStock.jsp" class="btn btn-primary">View Stock Levels</a>
-                    <a href="reserveFruits.jsp" class="btn btn-success">Reserve Fruits</a>
-                    <a href="borrowFruits.jsp" class="btn btn-warning">Borrow Fruits</a>
-                    <a href="viewReservations.jsp" class="btn btn-info">View Reservations</a>
-                    <a href="updateStock.jsp" class="btn btn-secondary">Update Stock Levels</a>
+                    <a href="viewAnalytics.jsp" class="btn btn-primary">View Analytics</a>
+                    <a href="generateReports.jsp" class="btn btn-success">Generate Reports</a>
+                    <a href="manageUsers.jsp" class="btn btn-warning">Manage Users</a>
+                    <a href="manageFruits.jsp" class="btn btn-info">Manage Fruit Types</a>
                 </div>
             </div>
         </div>
@@ -60,9 +60,9 @@
             <div class="card-body">
                 <h3 class="card-title">Notifications</h3>
                 <ul class="list-group">
-                    <li class="list-group-item">Reservation #123 approved.</li>
-                    <li class="list-group-item">Borrow request #456 pending.</li>
-                    <li class="list-group-item">Stock for "Apples" is running low.</li>
+                    <li class="list-group-item">New user account created: Warehouse Staff.</li>
+                    <li class="list-group-item">Reserve needs report for April is ready.</li>
+                    <li class="list-group-item">Consumption report for Q1 is available.</li>
                 </ul>
             </div>
         </div>

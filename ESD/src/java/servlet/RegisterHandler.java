@@ -38,16 +38,16 @@ public class RegisterHandler extends HttpServlet {
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        int role = Integer.parseInt(request.getParameter("role"));
+        String role = request.getParameter("role");
         boolean isValid = userDB.isValidUser(username, password);
 
         PrintWriter out = response.getWriter();
 
         if (!isValid) {
-            if (role == 1) {
+            if (role.equals("BakeryShopStaff")) {
                 int shopID = Integer.parseInt(request.getParameter("shopID"));
                 userID = userDB.createUser(username, email, password, role, shopID);
-            } else if (role == 2) {
+            } else if (role.equals("WarehouseStaff")) {
                 userID = userDB.createUser(username, email, password, role, null); // Pass null for shopID
             }
         }

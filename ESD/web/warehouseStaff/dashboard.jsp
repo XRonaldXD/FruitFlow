@@ -4,14 +4,72 @@
     Author     : user
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse Staff Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Warehouse Dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.jsp">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container mt-4">
+        <!-- Welcome Section -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="card-title">Welcome, <%= session.getAttribute("username") %>!</h3>
+                <p class="card-text">Role: Warehouse Staff</p>
+            </div>
+        </div>
+
+        <!-- Actions Section -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="card-title">Actions</h3>
+                <div class="d-grid gap-2">
+                    <a href="viewStock.jsp" class="btn btn-primary">View Stock Levels</a>
+                    <a href="approveReservations.jsp" class="btn btn-success">Approve Reservations</a>
+                    <a href="approveBorrowing.jsp" class="btn btn-warning">Approve Borrowing</a>
+                    <a href="arrangeDelivery.jsp" class="btn btn-info">Arrange Deliveries</a>
+                    <a href="updateStock.jsp" class="btn btn-secondary">Update Stock Levels</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications Section -->
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Notifications</h3>
+                <ul class="list-group">
+                    <li class="list-group-item">Reservation #123 needs approval.</li>
+                    <li class="list-group-item">Borrow request #456 pending.</li>
+                    <li class="list-group-item">Delivery #789 is in transit.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

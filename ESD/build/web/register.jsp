@@ -30,7 +30,7 @@
             <div class="collapse" id="shopStaff">
                 <div class="card card-body">
                     <form action="RegisterHandler" method="POST">
-                        <input type="hidden" id="shopStaff" name="role" value="1">
+                        <input type="hidden" id="shopStaff" name="role" value="BakeryShopStaff">
                         <div class="form-group">
                             <label for="username">Username</label>
                             <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
@@ -54,7 +54,7 @@
             <div class="collapse" id="warehouseStaff">
                 <div class="card card-body">
                     <form action="RegisterHandler" method="POST">
-                        <input type="hidden" id="warehouseStaff" name="role" value="2">
+                        <input type="hidden" id="warehouseStaff" name="role" value="WarehouseStaff">
                         <div class="form-group">
                             <label for="username">Username</label>
                             <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
