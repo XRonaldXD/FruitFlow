@@ -4,6 +4,7 @@
  */
 package db;
 
+import bean.User;
 import java.io.IOException;
 import java.sql.*;
 
@@ -109,6 +110,35 @@ public class UserDB {
         }
 
         return result;
+    }
+
+    public User getUser(String username, String password) {
+        User user = null;
+        String sql = "SELECT * "
+                + "FROM users WHERE username = ? AND password = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, username);
+            stmt.setString(2, password); // Ensure passwords are hashed and compared securely
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                user = new User();
+                user.setUserId(rs.getInt("user_id"));
+                user.setUsername(rs.getString("username"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getString("role"));
+                user.setShopId(rs.getObject("shop_id") != null ? rs.getInt("shop_id") : null);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace(); // Handle IO exceptions
+        }
+
+        return user;
     }
 
     public int createUser(String username, String email, String password, String role, Integer shopID) {

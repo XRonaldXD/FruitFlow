@@ -73,7 +73,7 @@ public class User implements Serializable {
         this.role = role;
     }
 
-    public int getShopId() {
+    public Integer getShopId() {
         return shopId;
     }
 

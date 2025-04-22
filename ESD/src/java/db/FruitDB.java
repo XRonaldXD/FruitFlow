@@ -27,10 +27,28 @@ public class FruitDB {
         return DriverManager.getConnection(dbUrl, dbUser, dbPassword);
     }
 
+    public List<Fruit> getAllFruits() {
+        List<Fruit> fruits = new ArrayList<>();
+        String sql = "SELECT fruit_id, fruit_name FROM fruits";
+
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                int fruitId = rs.getInt("fruit_id");
+                String fruitName = rs.getString("fruit_name");
+                fruits.add(new Fruit(fruitId, fruitName, 0));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return fruits;
+    }
+
     // Get stock levels for a specific shop
     public List<Fruit> getStockByShop(int shopId) {
         List<Fruit> fruits = new ArrayList<>();
-        String sql = "SELECT f.fruit_name, s.stock_level "
+        String sql = "SELECT f.fruit_id, f.fruit_name, s.stock_level "
                 + "FROM stock s "
                 + "JOIN fruits f ON s.fruit_id = f.fruit_id "
                 + "WHERE s.shop_id = ?";
@@ -41,9 +59,10 @@ public class FruitDB {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
+                int fruitId = rs.getInt("fruit_id");
                 String fruitName = rs.getString("fruit_name");
                 int stockLevel = rs.getInt("stock_level");
-                fruits.add(new Fruit(fruitName, stockLevel));
+                fruits.add(new Fruit(fruitId, fruitName, stockLevel));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -81,5 +100,24 @@ public class FruitDB {
         }
 
         return shopStocks;
+    }
+
+    public int getCityId(int shopId) {
+        int cityId = -1; // Default value if no city is found
+        String sql = "SELECT city_id FROM shops WHERE shop_id = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, shopId); // Set the shopId parameter
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                cityId = rs.getInt("city_id"); // Retrieve the city_id
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return cityId; // Return the city_id or -1 if not found
     }
 }

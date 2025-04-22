@@ -24,7 +24,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="logout.jsp">Logout</a>
+                        <a class="nav-link" href="./logout.jsp">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -47,8 +47,8 @@
             <div class="card-body">
                 <h3 class="card-title">Actions</h3>
                 <div class="d-grid gap-2">
-                    <a href="../ViewStock?shopId=1&cityId=1" class="btn btn-primary">View Stock</a>
-                    <a href="reserveFruits.jsp" class="btn btn-success">Reserve Fruits</a>
+                    <a href="../ViewStock?shopId=<jsp:getProperty name="user" property="shopId"/>" class="btn btn-primary">View Stock</a>
+                    <a href="../ReserveFruitsHandler?action=view" class="btn btn-success">Reserve Fruits</a>
                     <a href="borrowFruits.jsp" class="btn btn-warning">Borrow Fruits</a>
                     <a href="viewReservations.jsp" class="btn btn-info">View Reservations</a>
                     <a href="updateStock.jsp" class="btn btn-secondary">Update Stock Levels</a>

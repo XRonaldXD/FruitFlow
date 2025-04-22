@@ -41,12 +41,11 @@ public class LoginHandler extends HttpServlet {
         boolean isValid = userDB.isValidUser(username, password);
         try (PrintWriter out = response.getWriter()) {
             if (isValid) {    //login
+                User user = userDB.getUser(username, password);
                 String role = userDB.getRole(username, password);
+                
                 HttpSession session = request.getSession(true);
-                User bean = new User();
-                bean.setUsername(username);
-                bean.setRole(role);
-                session.setAttribute("user", bean);
+                session.setAttribute("user", user);
 
                 doLogin(request, response, role);
             }

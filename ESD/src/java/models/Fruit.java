@@ -9,14 +9,23 @@ package models;
  * @author user
  */
 public class Fruit {
+    private int fruitId;
     private String fruitName;
     private int stockLevel;
 
-    public Fruit(String fruitName, int stockLevel) {
+    public Fruit(int fruitId, String fruitName, int stockLevel) {
+        this.fruitId = fruitId;
         this.fruitName = fruitName;
         this.stockLevel = stockLevel;
     }
 
+    public int getFruitId() {
+        return fruitId;
+    }
+
+    public void setFruitId(int fruitId) {
+        this.fruitId = fruitId;
+    }
     public String getFruitName() {
         return fruitName;
     }

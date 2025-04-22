@@ -38,7 +38,7 @@ public class ViewStock extends HttpServlet {
             throws ServletException, IOException {
         // Example: Replace with actual shopId and cityId from session or request
         int shopId = Integer.parseInt(request.getParameter("shopId")); // Current shop ID
-        int cityId = Integer.parseInt(request.getParameter("cityId")); // Current city ID
+        int cityId = fruitDB.getCityId(shopId);
 
         // Fetch stock data
         List<Fruit> shopStock = fruitDB.getStockByShop(shopId); // Stock for the current shop
