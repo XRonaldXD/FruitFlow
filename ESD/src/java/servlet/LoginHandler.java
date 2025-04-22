@@ -42,7 +42,6 @@ public class LoginHandler extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             if (isValid) {    //login
                 String role = userDB.getRole(username, password);
-
                 HttpSession session = request.getSession(true);
                 User bean = new User();
                 bean.setUsername(username);
@@ -62,14 +61,15 @@ public class LoginHandler extends HttpServlet {
         String targetURL = "login.jsp"; // Default to login page
 
         if (role.equals("BakeryShopStaff")) {
-            targetURL = "/bakeryShopStaff/dashboard.jsp"; // Path for Bakery Shop Staff
+            // Bakery Shop Staff
+            response.sendRedirect("./bakeryShopStaff/dashboard.jsp");
         } else if (role.equals("WarehouseStaff")) {
-            targetURL = "/warehouseStaff/dashboard.jsp"; // Path for Warehouse Staff
+            // Warehouse Staff
+            response.sendRedirect("./warehouseStaff/dashboard.jsp");
         } else {
             targetURL = "/login.jsp"; // Default to login page
         }
 
-// Forward the request to the target URL
         RequestDispatcher rd = getServletContext().getRequestDispatcher(targetURL);
         rd.forward(request, response);
     }

@@ -37,7 +37,8 @@
         <!-- Welcome Section -->
         <div class="card mb-4">
             <div class="card-body">
-                <h3 class="card-title">Welcome, <%= session.getAttribute("username") %>!</h3>
+                <jsp:useBean id="user" class="bean.User" scope="session"></jsp:useBean>
+                <h3 class="card-title">Welcome, <jsp:getProperty name="user" property="username"/>!</h3>
                 <p class="card-text">Role: Warehouse Staff</p>
             </div>
         </div>

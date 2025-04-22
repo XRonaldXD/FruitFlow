@@ -36,7 +36,8 @@
         <!-- Welcome Section -->
         <div class="card mb-4">
             <div class="card-body">
-                <h3 class="card-title">Welcome, <%= session.getAttribute("username") %>!</h3>
+                <jsp:useBean id="user" class="bean.User" scope="session"></jsp:useBean>
+                <h3 class="card-title">Welcome, <jsp:getProperty name="user" property="username"/>!</h3>
                 <p class="card-text">Role: Bakery Shop Staff</p>
             </div>
         </div>
@@ -46,7 +47,7 @@
             <div class="card-body">
                 <h3 class="card-title">Actions</h3>
                 <div class="d-grid gap-2">
-                    <a href="./bakeryShopStaff/viewStock.jsp" class="btn btn-primary">View Stock Levels</a>
+                    <a href="../ViewStock?shopId=1&cityId=1" class="btn btn-primary">View Stock</a>
                     <a href="reserveFruits.jsp" class="btn btn-success">Reserve Fruits</a>
                     <a href="borrowFruits.jsp" class="btn btn-warning">Borrow Fruits</a>
                     <a href="viewReservations.jsp" class="btn btn-info">View Reservations</a>

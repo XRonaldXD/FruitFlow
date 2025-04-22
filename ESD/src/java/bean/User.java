@@ -14,6 +14,7 @@ public class User implements Serializable {
 
     private int userId;
     private String username;
+    private String email;
     private String password; // Store hashed password
     private String role; // e.g., "Shop Staff", "Warehouse Staff", "Senior Management"
     private Integer shopId; // Nullable for non-shop users
@@ -22,9 +23,10 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(int userId, String username, String password, String role, Integer shopId) {
+    public User(int userId, String username, String email, String password, String role, Integer shopId) {
         this.userId = userId;
         this.username = username;
+        this.email = email;
         this.password = password;
         this.role = role;
         this.shopId = shopId;
@@ -45,6 +47,14 @@ public class User implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

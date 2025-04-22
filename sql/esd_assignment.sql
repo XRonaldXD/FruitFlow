@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1:3306
--- 產生時間： 2025-04-22 10:59:20
+-- 產生時間： 2025-04-22 11:43:24
 -- 伺服器版本： 8.2.0
 -- PHP 版本： 8.2.13
 
@@ -165,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `shops` (
   `city_id` int NOT NULL,
   PRIMARY KEY (`shop_id`),
   KEY `city_id` (`city_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 傾印資料表的資料 `shops`
@@ -174,7 +174,8 @@ CREATE TABLE IF NOT EXISTS `shops` (
 INSERT INTO `shops` (`shop_id`, `shop_name`, `city_id`) VALUES
 (1, 'Tokyo Bakery', 1),
 (2, 'NYC Bakery', 2),
-(3, 'HK Bakery', 3);
+(3, 'HK Bakery', 3),
+(4, 'Osaka Bakery', 1);
 
 -- --------------------------------------------------------
 
@@ -193,14 +194,16 @@ CREATE TABLE IF NOT EXISTS `stock` (
   KEY `fruit_id` (`fruit_id`),
   KEY `shop_id` (`shop_id`),
   KEY `warehouse_id` (`warehouse_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 傾印資料表的資料 `stock`
 --
 
 INSERT INTO `stock` (`stock_id`, `fruit_id`, `shop_id`, `warehouse_id`, `stock_level`) VALUES
-(1, 1, NULL, 1, 100);
+(1, 1, NULL, 1, 100),
+(4, 1, 1, NULL, 500),
+(5, 3, 4, NULL, 100);
 
 -- --------------------------------------------------------
 
