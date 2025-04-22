@@ -1,0 +1,218 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package db;
+
+import java.io.IOException;
+import java.sql.*;
+
+public class UserDB {
+
+    private String dbUrl;
+    private String dbUser;
+    private String dbPassword;
+
+    public UserDB(String dbUrl, String dbUser, String dbPassword) {
+        this.dbUrl = dbUrl;
+        this.dbUser = dbUser;
+        this.dbPassword = dbPassword;
+    }
+
+    public Connection getConnection() throws SQLException, IOException {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+    }
+
+    public boolean isValidUser(String username, String password) {
+        Connection conn = null;
+        PreparedStatement pStmt = null;
+
+        boolean result = false;
+
+        try {
+            conn = getConnection();
+            String preQueryStatement = "SELECT * FROM user WHERE username = ? AND password = ?;";
+
+            pStmt = conn.prepareStatement(preQueryStatement);
+
+            pStmt.setString(1, username);
+            pStmt.setString(2, password);
+
+            ResultSet rs = null;
+
+            rs = pStmt.executeQuery();
+
+            if (rs.next()) {
+                result = true;
+            }
+
+            pStmt.close();
+            conn.close();
+
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public int getType(String username, String password) {
+        Connection conn = null;
+        PreparedStatement pStmt = null;
+        ResultSet rs = null;
+
+        int result = -1; // Default value if no user is found
+
+        try {
+            conn = getConnection(); // Ensure this method is implemented to return a valid DB connection
+            String preQueryStatement = "SELECT type FROM user WHERE username = ? AND password = ?";
+
+            pStmt = conn.prepareStatement(preQueryStatement);
+            pStmt.setString(1, username);
+            pStmt.setString(2, password);
+
+            rs = pStmt.executeQuery();
+
+            if (rs.next()) {
+                result = rs.getInt("type"); // Retrieve the 'type' column value
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(); // Log the exception for debugging
+        } catch (IOException ex) {
+            ex.printStackTrace(); // Handle IO exceptions
+        } finally {
+            // Ensure resources are closed properly
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pStmt != null) {
+                    pStmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return result;
+    }
+    
+    public int createUser(String username, String email, String password, int type) {
+        Connection conn = null;
+        PreparedStatement pStmt = null;
+        ResultSet generatedKeys = null; // To hold the generated keys
+        int userID = -1; // Default to -1 to indicate failure
+
+        try {
+            conn = getConnection();
+            String sql = "INSERT INTO `user` (`username`, `email`, `password`, `type`) VALUES (?, ?, ?, ?);";
+
+            pStmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); // Enable key retrieval
+
+            pStmt.setString(1, username);
+            pStmt.setString(2, email);
+            pStmt.setString(3, password);
+            pStmt.setInt(4, type);
+
+            int rowCount = pStmt.executeUpdate();
+            if (rowCount >= 1) {
+                // Retrieve the generated userID
+                generatedKeys = pStmt.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    userID = generatedKeys.getInt(1); // Get the generated key
+                }
+            }
+            pStmt.close();
+            conn.close();
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return userID; // Return the userID or -1 if creation failed
+    }
+
+    public boolean createShopStaff(int userID, int shopID, String city) {
+        Connection conn = null;
+        PreparedStatement pStmt = null;
+
+        boolean result = false;
+
+        try {
+            conn = getConnection();
+            String PreparedStatement = "INSERT INTO `bakeryshopstaff` (`userID`, `shopID`, `city`) VALUES (?, ?, ?);";
+
+            pStmt = conn.prepareStatement(PreparedStatement);
+
+            pStmt.setInt(1, userID);
+            pStmt.setInt(2, shopID);
+            pStmt.setString(3, city);
+
+            int rowCount = pStmt.executeUpdate();
+            if (rowCount >= 1) {
+                result = true;
+            }
+            pStmt.close();
+            conn.close();
+
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    public boolean createWarehouseStaff(int userID, String country) {
+        Connection conn = null;
+        PreparedStatement pStmt = null;
+
+        boolean result = false;
+
+        try {
+            conn = getConnection();
+            String PreparedStatement = "INSERT INTO `warehousestaff` (`userID`, `country`) VALUES (?, ?);";
+
+            pStmt = conn.prepareStatement(PreparedStatement);
+
+            pStmt.setInt(1, userID);
+            pStmt.setString(2, country);
+
+            int rowCount = pStmt.executeUpdate();
+            if (rowCount >= 1) {
+                result = true;
+            }
+            pStmt.close();
+            conn.close();
+
+        } catch (SQLException ex) {
+            while (ex != null) {
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return result;
+    }
+}
