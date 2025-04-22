@@ -30,7 +30,7 @@
             <div class="collapse" id="shopStaff">
                 <div class="card card-body">
                     <form action="RegisterHandler" method="POST">
-                        <input type="hidden" id="shopStaff" name="type" value="1">
+                        <input type="hidden" id="shopStaff" name="role" value="1">
                         <div class="form-group">
                             <label for="username">Username</label>
                             <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
@@ -42,23 +42,6 @@
                         <div class="form-group">
                             <label for="password">Password</label>
                             <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="city">City</label>
-                            <select id="city" name="city" class="form-control">
-                                <option name="city" value="HongKong" disabled>HongKong</option>
-                                <option name="city" value="HongKongIsland">Hong Kong Island</option>
-                                <option name="city" value="Kowloon">Kowloon</option>
-                                <option name="city" value="NewTerritories">New Territories</option>
-                                <option name="city" value="Japan" disabled>Japan</option>
-                                <option name="city" value="Tokyo">Tokyo</option>
-                                <option name="city" value="Osaka">Osaka</option>
-                                <option name="city" value="Nagoya">Nagoya</option>
-                                <option name="city" value="USA" disabled>USA</option>
-                                <option name="city" value="NewYork">New York</option>
-                                <option name="city" value="LosAngeles">Los Angeles</option>
-                                <option name="city" value="Chicago">Chicago</option>
-                            </select>
                         </div>
                         <div class="form-group">
                             <label for="shopID">shopID</label>
@@ -71,7 +54,7 @@
             <div class="collapse" id="warehouseStaff">
                 <div class="card card-body">
                     <form action="RegisterHandler" method="POST">
-                        <input type="hidden" id="warehouseStaff" name="type" value="2">
+                        <input type="hidden" id="warehouseStaff" name="role" value="2">
                         <div class="form-group">
                             <label for="username">Username</label>
                             <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
@@ -83,14 +66,6 @@
                         <div class="form-group">
                             <label for="password">Password</label>
                             <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="country">Country</label>
-                            <select id="country" name="country" class="form-control">
-                                <option name="country" value="Japan" selected>Japan</option>
-                                <option name="country" value="HongKong">Hong Kong</option>
-                                <option name="country" value="USA">USA</option>
-                            </select>
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">Register</button>
                     </form>

@@ -4,6 +4,7 @@
  */
 package servlet;
 
+import bean.User;
 import java.sql.*;
 import db.UserDB;
 import jakarta.servlet.RequestDispatcher;
@@ -14,6 +15,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -21,48 +23,54 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "LoginHandler", urlPatterns = {"/LoginHandler"})
 public class LoginHandler extends HttpServlet {
-    
+
     private UserDB userDB;
-    
-    public void init(){
+
+    public void init() {
         String dbUrl = this.getServletContext().getInitParameter("dbUrl");
         String dbUser = this.getServletContext().getInitParameter("dbUser");
         String dbPassword = this.getServletContext().getInitParameter("dbPassword");
 
         userDB = new UserDB(dbUrl, dbUser, dbPassword);
     }
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         boolean isValid = userDB.isValidUser(username, password);
         try (PrintWriter out = response.getWriter()) {
-            if(isValid){    //login
-                int type = userDB.getType(username, password);
-                doLogin(request, response, type);
+            if (isValid) {    //login
+                int role = userDB.getRole(username, password);
+
+                HttpSession session = request.getSession(true);
+                User bean = new User();
+                bean.setUsername(username);
+                bean.setRole(role);
+                session.setAttribute("user", bean);
+
+                doLogin(request, response, role);
             }
-        }catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-    
-    protected void doLogin(HttpServletRequest request, HttpServletResponse response, int type)
+
+    protected void doLogin(HttpServletRequest request, HttpServletResponse response, int role)
             throws ServletException, IOException {
-        
-        String targetURL = "login.jsp";
-        
-        if(type == 1){
-            targetURL = "./bakeryShopStaff/dashboard.jsp";
-        }else if (type == 2){
-            targetURL = "./warehouseStaff/dashboard.jsp";
+
+        String targetURL = "login.jsp"; // Default to login page
+
+        if (role == 1) {
+            targetURL = "/bakeryShopStaff/dashboard.jsp"; // Path for Bakery Shop Staff
+        } else if (role == 2) {
+            targetURL = "/warehouseStaff/dashboard.jsp"; // Path for Warehouse Staff
+        } else {
+            targetURL = "/login.jsp"; // Default to login page
         }
-        else{
-            targetURL = "login.jsp";
-        }
-        
-        RequestDispatcher rd;
-        rd = getServletContext().getRequestDispatcher("/" + targetURL);
+
+// Forward the request to the target URL
+        RequestDispatcher rd = getServletContext().getRequestDispatcher(targetURL);
         rd.forward(request, response);
     }
 

@@ -22,36 +22,34 @@ import jakarta.servlet.http.HttpServletResponse;
 public class RegisterHandler extends HttpServlet {
 
     private UserDB userDB;
-    
-    public void init(){
+
+    public void init() {
         String dbUrl = this.getServletContext().getInitParameter("dbUrl");
         String dbUser = this.getServletContext().getInitParameter("dbUser");
         String dbPassword = this.getServletContext().getInitParameter("dbPassword");
 
         userDB = new UserDB(dbUrl, dbUser, dbPassword);
     }
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int userID = -1;
-        int type = Integer.parseInt(request.getParameter("type"));
+
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        int role = Integer.parseInt(request.getParameter("role"));
         boolean isValid = userDB.isValidUser(username, password);
-        
-        if(!isValid){
-           userID = userDB.createUser(username, email, password, type);
-        }
-        if(type == 1 && userID > 0){
-            String city = request.getParameter("city");
-            int shopID = Integer.parseInt(request.getParameter("shopID"));
-            userDB.createShopStaff(userID, shopID, city);
-        }else if(type == 2 && userID > 0){
-            String country = request.getParameter("country");
-            userDB.createWarehouseStaff(userID, country);
-        }else{
-            
+
+        PrintWriter out = response.getWriter();
+
+        if (!isValid) {
+            if (role == 1) {
+                int shopID = Integer.parseInt(request.getParameter("shopID"));
+                userID = userDB.createUser(username, email, password, role, shopID);
+            } else if (role == 2) {
+                userID = userDB.createUser(username, email, password, role, null); // Pass null for shopID
+            }
         }
         String targetURL = "login.jsp";
         RequestDispatcher rd;

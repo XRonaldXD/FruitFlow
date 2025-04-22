@@ -67,7 +67,7 @@ public class UserDB {
         return result;
     }
 
-    public int getType(String username, String password) {
+    public int getRole(String username, String password) {
         Connection conn = null;
         PreparedStatement pStmt = null;
         ResultSet rs = null;
@@ -76,7 +76,7 @@ public class UserDB {
 
         try {
             conn = getConnection(); // Ensure this method is implemented to return a valid DB connection
-            String preQueryStatement = "SELECT type FROM user WHERE username = ? AND password = ?";
+            String preQueryStatement = "SELECT role FROM user WHERE username = ? AND password = ?";
 
             pStmt = conn.prepareStatement(preQueryStatement);
             pStmt.setString(1, username);
@@ -85,7 +85,7 @@ public class UserDB {
             rs = pStmt.executeQuery();
 
             if (rs.next()) {
-                result = rs.getInt("type"); // Retrieve the 'type' column value
+                result = rs.getInt("role"); // Retrieve the 'role' column value
             }
         } catch (SQLException ex) {
             ex.printStackTrace(); // Log the exception for debugging
@@ -110,8 +110,8 @@ public class UserDB {
 
         return result;
     }
-    
-    public int createUser(String username, String email, String password, int type) {
+
+    public int createUser(String username, String email, String password, int role, Integer shopID) {
         Connection conn = null;
         PreparedStatement pStmt = null;
         ResultSet generatedKeys = null; // To hold the generated keys
@@ -119,100 +119,54 @@ public class UserDB {
 
         try {
             conn = getConnection();
-            String sql = "INSERT INTO `user` (`username`, `email`, `password`, `type`) VALUES (?, ?, ?, ?);";
+            String sql = "INSERT INTO `user` (`username`, `email`, `password`, `role`, `shop_id`) VALUES (?, ?, ?, ?, ?);";
 
             pStmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); // Enable key retrieval
 
             pStmt.setString(1, username);
             pStmt.setString(2, email);
             pStmt.setString(3, password);
-            pStmt.setInt(4, type);
+            pStmt.setInt(4, role);
+
+            // Handle null for shopID
+            if (shopID != null) {
+                pStmt.setInt(5, shopID);
+            } else {
+                pStmt.setNull(5, java.sql.Types.INTEGER);
+            }
 
             int rowCount = pStmt.executeUpdate();
+            System.out.println("Rows affected: " + rowCount);
+
             if (rowCount >= 1) {
                 // Retrieve the generated userID
                 generatedKeys = pStmt.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     userID = generatedKeys.getInt(1); // Get the generated key
+                    System.out.println("Generated UserID: " + userID);
                 }
             }
-            pStmt.close();
-            conn.close();
         } catch (SQLException ex) {
-            while (ex != null) {
-                ex.printStackTrace();
-                ex = ex.getNextException();
-            }
-        } catch (IOException ex) {
+            System.err.println("SQL Exception occurred:");
             ex.printStackTrace();
+        } catch (IOException ex) {
+            System.err.println("IO Exception occurred:");
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (generatedKeys != null) {
+                    generatedKeys.close();
+                }
+                if (pStmt != null) {
+                    pStmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return userID; // Return the userID or -1 if creation failed
-    }
-
-    public boolean createShopStaff(int userID, int shopID, String city) {
-        Connection conn = null;
-        PreparedStatement pStmt = null;
-
-        boolean result = false;
-
-        try {
-            conn = getConnection();
-            String PreparedStatement = "INSERT INTO `bakeryshopstaff` (`userID`, `shopID`, `city`) VALUES (?, ?, ?);";
-
-            pStmt = conn.prepareStatement(PreparedStatement);
-
-            pStmt.setInt(1, userID);
-            pStmt.setInt(2, shopID);
-            pStmt.setString(3, city);
-
-            int rowCount = pStmt.executeUpdate();
-            if (rowCount >= 1) {
-                result = true;
-            }
-            pStmt.close();
-            conn.close();
-
-        } catch (SQLException ex) {
-            while (ex != null) {
-                ex.printStackTrace();
-                ex = ex.getNextException();
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return result;
-    }
-
-    public boolean createWarehouseStaff(int userID, String country) {
-        Connection conn = null;
-        PreparedStatement pStmt = null;
-
-        boolean result = false;
-
-        try {
-            conn = getConnection();
-            String PreparedStatement = "INSERT INTO `warehousestaff` (`userID`, `country`) VALUES (?, ?);";
-
-            pStmt = conn.prepareStatement(PreparedStatement);
-
-            pStmt.setInt(1, userID);
-            pStmt.setString(2, country);
-
-            int rowCount = pStmt.executeUpdate();
-            if (rowCount >= 1) {
-                result = true;
-            }
-            pStmt.close();
-            conn.close();
-
-        } catch (SQLException ex) {
-            while (ex != null) {
-                ex.printStackTrace();
-                ex = ex.getNextException();
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return result;
     }
 }
