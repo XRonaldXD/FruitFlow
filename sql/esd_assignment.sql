@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1:3306
--- 產生時間： 2025-04-22 14:16:08
+-- 產生時間： 2025-04-22 14:39:52
 -- 伺服器版本： 8.2.0
 -- PHP 版本： 8.2.13
 
@@ -221,7 +221,7 @@ CREATE TABLE IF NOT EXISTS `stock` (
 --
 
 INSERT INTO `stock` (`stock_id`, `fruit_id`, `shop_id`, `warehouse_id`, `stock_level`) VALUES
-(1, 1, NULL, 1, 100),
+(1, 1, NULL, 1, 300),
 (4, 1, 1, NULL, 500),
 (5, 3, 4, NULL, 100);
 

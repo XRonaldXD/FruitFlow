@@ -12,5 +12,5 @@
     }
 
     // Redirect to the login page
-    response.sendRedirect("../login.jsp");
+    response.sendRedirect("./login.jsp");
 %>

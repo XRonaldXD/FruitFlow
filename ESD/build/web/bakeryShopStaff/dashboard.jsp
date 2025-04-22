@@ -24,7 +24,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="./logout.jsp">Logout</a>
+                        <a class="nav-link" href="../logout.jsp">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -51,7 +51,7 @@
                     <a href="../ReserveFruitsHandler?action=view" class="btn btn-success">Reserve Fruits</a>
                     <a href="../BorrowFruitsHandler?action=view" class="btn btn-warning">Borrow Fruits</a>
                     <a href="../ViewReservations" class="btn btn-info">View Reservations</a>
-                    <a href="updateStock.jsp" class="btn btn-secondary">Update Stock Levels</a>
+                    <a href="../UpdateStockHandler?action=view" class="btn btn-secondary">Update Stock Levels</a>
                 </div>
             </div>
         </div>

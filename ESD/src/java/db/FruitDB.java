@@ -102,6 +102,24 @@ public class FruitDB {
         return shopStocks;
     }
 
+    public boolean updateStockLevel(int fruitId, int newStockLevel, int shopId) {
+        String sql = "UPDATE stock SET stock_level = ? WHERE fruit_id = ? AND shop_id = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, newStockLevel);
+            stmt.setInt(2, fruitId);
+            stmt.setInt(3, shopId);
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0; // Return true if the stock level was successfully updated
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false; // Return false if an error occurred
+    }
+
     public String getFruitNameById(int fruitId) {
         String fruitName = null;
         String sql = "SELECT fruit_name FROM fruits WHERE fruit_id = ?";
