@@ -36,38 +36,43 @@ public class UpdateStockHandler extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String action = request.getParameter("action");
         User user = (User) request.getSession().getAttribute("user");
-        
+
         if (action.equals("view")) {
             // Fetch all fruits to process their stock updates
-            List<Fruit> fruits = fruitDB.getStockByShop(user.getShopId());
+            List<Fruit> fruits = fruitDB.getFruitsWithStockLevels(user.getShopId());
             request.setAttribute("fruits", fruits);
             RequestDispatcher dispatcher = request.getRequestDispatcher("./bakeryShopStaff/updateStockLevels.jsp");
             dispatcher.forward(request, response);
-            
-            
+
         } else if (action.equals("update")) {
             boolean success = true;
-            
-            List<Fruit> fruits = fruitDB.getStockByShop(user.getShopId());
+
+            List<Fruit> fruits = fruitDB.getFruitsWithStockLevels(user.getShopId());
 
             for (Fruit fruit : fruits) {
                 String paramName = "stock_" + fruit.getFruitId();
                 String newStockLevelStr = request.getParameter(paramName);
+                String oldStockLevelStr = request.getParameter("old_stockLevel_" + fruit.getFruitId());
 
                 if (newStockLevelStr != null) {
                     try {
                         int newStockLevel = Integer.parseInt(newStockLevelStr);
-                        boolean updated = fruitDB.updateStockLevel(fruit.getFruitId(), newStockLevel, user.getShopId());
+                        int oldStockLevel = Integer.parseInt(oldStockLevelStr);
+                        if (newStockLevel != oldStockLevel) {
+                            boolean updated = fruitDB.insertOrUpdateStockLevel(fruit.getFruitId(), user.getShopId(), newStockLevel);
 
-                        if (!updated) {
-                            success = false;
+                            if (!updated) {
+                                success = false;
+                            }
                         }
+
                     } catch (NumberFormatException e) {
-                        success = false;
+                        System.err.println("Invalid stock level input for fruit ID: " + fruit.getFruitId());
                         e.printStackTrace();
+                        success = false; // Set to false only if the exception affects the operation
                     }
                 }
             }
@@ -82,10 +87,62 @@ public class UpdateStockHandler extends HttpServlet {
             }
 
             // Fetch updated fruits list and forward back to the JSP
-            List<Fruit> updatedFruits = fruitDB.getStockByShop(user.getShopId());
+            List<Fruit> updatedFruits = fruitDB.getFruitsWithStockLevels(user.getShopId());
             request.setAttribute("fruits", updatedFruits);
 
             RequestDispatcher dispatcher = request.getRequestDispatcher("./bakeryShopStaff/updateStockLevels.jsp");
+            dispatcher.forward(request, response);
+        }
+        else if (action.equals("view_warehouse")){
+            // Fetch all fruits to process their stock updates
+            List<Fruit> fruits = fruitDB.getFruitsWithStockLevelsByWarehouse(user.getWarehouseId());
+            request.setAttribute("fruits", fruits);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./warehouseStaff/viewStockLevels.jsp");
+            dispatcher.forward(request, response);
+        }else if (action.equals("update_warehouse")){
+            boolean success = true;
+
+            List<Fruit> fruits = fruitDB.getFruitsWithStockLevelsByWarehouse(user.getWarehouseId());
+
+            for (Fruit fruit : fruits) {
+                String paramName = "stock_" + fruit.getFruitId();
+                String newStockLevelStr = request.getParameter(paramName);
+                String oldStockLevelStr = request.getParameter("old_stockLevel_" + fruit.getFruitId());
+
+                if (newStockLevelStr != null) {
+                    try {
+                        int newStockLevel = Integer.parseInt(newStockLevelStr);
+                        int oldStockLevel = Integer.parseInt(oldStockLevelStr);
+                        if (newStockLevel != oldStockLevel) {
+                            boolean updated = fruitDB.insertOrUpdateStockLevelByWarehouse(fruit.getFruitId(), user.getWarehouseId(), newStockLevel);
+
+                            if (!updated) {
+                                success = false;
+                            }
+                        }
+
+                    } catch (NumberFormatException e) {
+                        System.err.println("Invalid stock level input for fruit ID: " + fruit.getFruitId());
+                        e.printStackTrace();
+                        success = false; // Set to false only if the exception affects the operation
+                    }
+                }
+            }
+
+            // Set success or failure message
+            if (success) {
+                request.setAttribute("message", "Stock levels updated successfully!");
+                request.setAttribute("alertType", "success");
+            } else {
+                request.setAttribute("message", "Failed to update some stock levels. Please try again.");
+                request.setAttribute("alertType", "danger");
+            }
+
+            // Fetch updated fruits list and forward back to the JSP
+            List<Fruit> updatedFruits = fruitDB.getFruitsWithStockLevelsByWarehouse(user.getWarehouseId());
+            request.setAttribute("fruits", updatedFruits);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./warehouseStaff/viewStockLevels.jsp");
             dispatcher.forward(request, response);
         }
     }

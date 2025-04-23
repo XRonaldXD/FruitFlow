@@ -48,7 +48,8 @@ public class RegisterHandler extends HttpServlet {
                 int shopID = Integer.parseInt(request.getParameter("shopID"));
                 userID = userDB.createUser(username, email, password, role, shopID);
             } else if (role.equals("WarehouseStaff")) {
-                userID = userDB.createUser(username, email, password, role, null); // Pass null for shopID
+                int warehouseID = Integer.parseInt(request.getParameter("warehouseID"));
+                userID = userDB.createUser(username, email, password, role, warehouseID); // Pass null for shopID
             }
         }
         String targetURL = "login.jsp";

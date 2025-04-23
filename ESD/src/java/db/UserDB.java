@@ -131,6 +131,7 @@ public class UserDB {
                 user.setPassword(rs.getString("password"));
                 user.setRole(rs.getString("role"));
                 user.setShopId(rs.getObject("shop_id") != null ? rs.getInt("shop_id") : null);
+                user.setWarehouseId(rs.getObject("warehouse_id") != null ? rs.getInt("warehouse_id") : null);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -141,15 +142,20 @@ public class UserDB {
         return user;
     }
 
-    public int createUser(String username, String email, String password, String role, Integer shopID) {
+    public int createUser(String username, String email, String password, String role, Integer ID) {
         Connection conn = null;
         PreparedStatement pStmt = null;
         ResultSet generatedKeys = null; // To hold the generated keys
+        String sql = "";
         int userID = -1; // Default to -1 to indicate failure
 
         try {
             conn = getConnection();
-            String sql = "INSERT INTO `users` (`username`, `email`, `password`, `role`, `shop_id`) VALUES (?, ?, ?, ?, ?);";
+            if (role.equals("BakeryShopStaff")) {
+                sql = "INSERT INTO `users` (`username`, `email`, `password`, `role`, `shop_id`) VALUES (?, ?, ?, ?, ?);";
+            }else if (role.equals("WarehouseStaff")){
+                sql = "INSERT INTO `users` (`username`, `email`, `password`, `role`, `warehouse_id`) VALUES (?, ?, ?, ?, ?);";
+            }
 
             pStmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); // Enable key retrieval
 
@@ -157,13 +163,8 @@ public class UserDB {
             pStmt.setString(2, email);
             pStmt.setString(3, password);
             pStmt.setString(4, role);
+            pStmt.setInt(5, ID);
 
-            // Handle null for shopID
-            if (shopID != null) {
-                pStmt.setInt(5, shopID);
-            } else {
-                pStmt.setNull(5, java.sql.Types.INTEGER);
-            }
 
             int rowCount = pStmt.executeUpdate();
             System.out.println("Rows affected: " + rowCount);

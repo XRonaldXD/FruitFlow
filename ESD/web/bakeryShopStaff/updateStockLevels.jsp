@@ -71,8 +71,9 @@
                         <td><%= fruit.getFruitName() %></td>
                         <td><%= fruit.getStockLevel() %></td>
                         <td>
+                            <input type="hidden" name="old_stockLevel_<%= fruit.getFruitId() %>" value="<%= fruit.getStockLevel() %>">
                             <input type="number" class="form-control" name="stock_<%= fruit.getFruitId() %>" 
-                                   placeholder="Enter new stock level" min="0" required>
+                                   placeholder="Enter new stock level" min="0" value="<%= fruit.getStockLevel() %>">
                         </td>
                     </tr>
                     <% 

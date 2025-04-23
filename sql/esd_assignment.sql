@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1:3306
--- 產生時間： 2025-04-22 14:39:52
+-- 產生時間： 2025-04-23 08:59:15
 -- 伺服器版本： 8.2.0
 -- PHP 版本： 8.2.13
 
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `countries` (
   `country_name` varchar(50) NOT NULL,
   PRIMARY KEY (`country_id`),
   UNIQUE KEY `country_name` (`country_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 傾印資料表的資料 `countries`
@@ -214,16 +214,20 @@ CREATE TABLE IF NOT EXISTS `stock` (
   KEY `fruit_id` (`fruit_id`),
   KEY `shop_id` (`shop_id`),
   KEY `warehouse_id` (`warehouse_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 傾印資料表的資料 `stock`
 --
 
 INSERT INTO `stock` (`stock_id`, `fruit_id`, `shop_id`, `warehouse_id`, `stock_level`) VALUES
-(1, 1, NULL, 1, 300),
-(4, 1, 1, NULL, 500),
-(5, 3, 4, NULL, 100);
+(1, 1, NULL, 1, 500),
+(4, 1, 1, NULL, 300),
+(5, 3, 4, NULL, 100),
+(6, 2, 1, NULL, 500),
+(7, 3, 1, NULL, 250),
+(8, 2, NULL, 1, 1500),
+(9, 3, NULL, 1, 200);
 
 -- --------------------------------------------------------
 
@@ -239,19 +243,21 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(50) NOT NULL,
   `role` enum('BakeryShopStaff','WarehouseStaff','SeniorManagement') NOT NULL,
   `shop_id` int DEFAULT NULL,
+  `warehouse_id` int DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`),
-  KEY `shop_id` (`shop_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `shop_id` (`shop_id`),
+  KEY `warehouse_id` (`warehouse_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 傾印資料表的資料 `users`
 --
 
-INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `role`, `shop_id`) VALUES
-(1, 'Ronald Sham', 'RonaldSham@gmail.com', '12345678', 'BakeryShopStaff', 1),
-(2, 'Chim Sir', 'ChimSir@gmail.com', '246810', 'WarehouseStaff', NULL);
+INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `role`, `shop_id`, `warehouse_id`) VALUES
+(1, 'Ronald Sham', 'RonaldSham@gmail.com', '12345678', 'BakeryShopStaff', 1, NULL),
+(4, 'Chim Sir', 'ChimSir@gmail.com', '246810', 'WarehouseStaff', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -324,7 +330,8 @@ ALTER TABLE `stock`
 -- 資料表的限制式 `users`
 --
 ALTER TABLE `users`
-  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`shop_id`);
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`shop_id`),
+  ADD CONSTRAINT `users_ibfk_2` FOREIGN KEY (`warehouse_id`) REFERENCES `warehouses` (`warehouse_id`);
 
 --
 -- 資料表的限制式 `warehouses`

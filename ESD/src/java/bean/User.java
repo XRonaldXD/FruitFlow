@@ -18,18 +18,20 @@ public class User implements Serializable {
     private String password; // Store hashed password
     private String role; // e.g., "Shop Staff", "Warehouse Staff", "Senior Management"
     private Integer shopId; // Nullable for non-shop users
+    private Integer warehouseId;
 
     // Constructors
     public User() {
     }
 
-    public User(int userId, String username, String email, String password, String role, Integer shopId) {
+    public User(int userId, String username, String email, String password, String role, Integer shopId, Integer warehouseId) {
         this.userId = userId;
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
         this.shopId = shopId;
+        this.warehouseId = warehouseId;
     }
 
     // Getters and Setters
@@ -79,5 +81,12 @@ public class User implements Serializable {
 
     public void setShopId(Integer shopId) {
         this.shopId = shopId;
+    }
+    public Integer getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(Integer warehouseId) {
+        this.warehouseId = warehouseId;
     }
 }

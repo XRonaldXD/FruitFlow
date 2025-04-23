@@ -67,6 +67,10 @@
                             <label for="password">Password</label>
                             <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
                         </div>
+                        <div class="form-group">
+                            <label for="warehouseID">warehouseID</label>
+                            <input type="text" class="form-control" id="warehouseID" name="warehouseID" placeholder="Enter your warehouseID" required>
+                        </div>
                         <button type="submit" class="btn btn-primary btn-block">Register</button>
                     </form>
                 </div>
