@@ -164,6 +164,34 @@ public class ReservationDB {
         return false; // Return false if an error occurred
     }
 
+    public List<Reservation> getPendingReservations() {
+        List<Reservation> reservations = new ArrayList<>();
+        String sql = "SELECT reservation_id, shop_id, fruit_id, warehouse_id, quantity, reservation_date, status "
+                + "FROM reservations "
+                + "WHERE status = 'Pending' AND warehouse_id IS NULL";
+
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int reservationId = rs.getInt("reservation_id");
+                Integer shopId = rs.getObject("shop_id") != null ? rs.getInt("shop_id") : null; // Handle nullable shop_id
+                int fruitId = rs.getInt("fruit_id");
+                Integer warehouseId = rs.getObject("warehouse_id") != null ? rs.getInt("warehouse_id") : null; // Handle nullable warehouse_id
+                int quantity = rs.getInt("quantity");
+                String reservationDate = rs.getString("reservation_date");
+                String status = rs.getString("status");
+
+                reservations.add(new Reservation(reservationId, fruitId, shopId, warehouseId, quantity, reservationDate, status));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return reservations;
+    }
+
     public List<CountryReservation> getTotalReservationsByCountryAndFruit() {
         List<CountryReservation> countryReservations = new ArrayList<>();
         String sql = "SELECT c.country_id, c.country_name, f.fruit_id, f.fruit_name, SUM(r.quantity) AS total_quantity "

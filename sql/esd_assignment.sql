@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1:3306
--- 產生時間： 2025-04-23 11:53:43
+-- 產生時間： 2025-04-23 12:43:58
 -- 伺服器版本： 8.2.0
 -- PHP 版本： 8.2.13
 
@@ -122,14 +122,20 @@ CREATE TABLE IF NOT EXISTS `deliveries` (
   KEY `from_warehouse_id` (`from_warehouse_id`),
   KEY `to_warehouse_id` (`to_warehouse_id`),
   KEY `to_shop_id` (`to_shop_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 傾印資料表的資料 `deliveries`
 --
 
 INSERT INTO `deliveries` (`delivery_id`, `reservation_id`, `fruit_id`, `from_warehouse_id`, `to_warehouse_id`, `to_shop_id`, `quantity`, `delivery_date`, `status`) VALUES
-(1, 12, 2, 1, 22, NULL, 500, '2025-04-30', 'In Transit');
+(1, 12, 2, 1, 22, NULL, 500, '2025-04-30', 'In Transit'),
+(6, 8, 2, 1, NULL, 3, 150, '2025-05-07', 'In Transit'),
+(7, 8, 2, 1, NULL, 3, 150, '2025-05-06', 'In Transit'),
+(8, 8, 2, 1, NULL, 3, 150, '2025-05-03', 'In Transit'),
+(9, 8, 2, 1, NULL, 3, 150, '2025-05-09', 'In Transit'),
+(10, 8, 2, 1, NULL, 3, 150, '2025-05-06', 'In Transit'),
+(11, 9, 1, 1, NULL, 3, 100, '2025-04-29', 'In Transit');
 
 -- --------------------------------------------------------
 
@@ -187,8 +193,8 @@ INSERT INTO `reservations` (`reservation_id`, `shop_id`, `warehouse_id`, `fruit_
 (4, 1, NULL, 1, 50, '2025-04-29', 'Rejected'),
 (5, 1, NULL, 2, 100, '2025-04-25', 'Approved'),
 (7, 3, NULL, 3, 1000, '2025-04-29', 'Approved'),
-(8, 3, NULL, 2, 150, '2025-04-30', 'Pending'),
-(9, 3, NULL, 1, 100, '2025-04-21', 'Pending'),
+(8, 3, NULL, 2, 150, '2025-04-30', 'In Transit'),
+(9, 3, NULL, 1, 100, '2025-04-21', 'In Transit'),
 (11, 3, NULL, 1, 500, '2025-04-28', 'Pending'),
 (12, NULL, 22, 2, 500, '2025-04-28', 'In Transit');
 

@@ -4,7 +4,9 @@
  */
 package bean;
 
+import db.CityDB;
 import db.FruitDB;
+import db.ShopDB;
 import db.WarehouseDB;
 
 /**
@@ -43,6 +45,11 @@ public class Reservation {
     public String getWarehouseName(){
         WarehouseDB warehouseDB = new WarehouseDB("jdbc:mysql://localhost:3306/esd_assignment", "root", "");
         return warehouseDB.getWarehouseNameById(this.warehouseId);
+    }
+    
+    public String getShopName(){
+       ShopDB shopDB = new ShopDB("jdbc:mysql://localhost:3306/esd_assignment", "root", "");
+       return shopDB.getShopById(this.shopId).getShopName();
     }
 
     // Getters and Setters

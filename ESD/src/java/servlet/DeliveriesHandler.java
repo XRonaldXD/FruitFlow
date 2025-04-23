@@ -80,6 +80,46 @@ public class DeliveriesHandler extends HttpServlet {
             // Forward back to the delivery arrangement page
             RequestDispatcher dispatcher = request.getRequestDispatcher("./warehouseStaff/arrangeDeliveriesToWarehouse.jsp?action=view");
             dispatcher.forward(request, response);
+        } else if (action.equals("view_toShop")) {
+            List<Reservation> reservations = reservationDB.getPendingReservations();
+
+            // Set deliveries as a request attribute
+            request.setAttribute("reservations", reservations);
+
+            // Forward to the JSP
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./warehouseStaff/arrangeDeliveriesToShop.jsp");
+            dispatcher.forward(request, response);
+        } else if (action.equals("arrange_toShop")) {
+            int reservationId = Integer.parseInt(request.getParameter("reservationId"));
+            int fruitId = Integer.parseInt(request.getParameter("fruitId"));
+            Integer fromWarehouseId = user.getWarehouseId();
+            Integer toShopId = Integer.parseInt(request.getParameter("toShopId"));
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            String deliveryDate = request.getParameter("deliveryDate");
+
+            // Create a new delivery
+            boolean deliveryCreated = deliveryDB.createDelivery(reservationId, fruitId, fromWarehouseId, null, toShopId, quantity, deliveryDate);
+
+            if (deliveryCreated) {
+                boolean updateReservationStatus = reservationDB.updateReservationStatus(reservationId, "In Transit");
+                if (updateReservationStatus) {
+                    request.setAttribute("message", "Delivery arranged successfully!");
+                    request.setAttribute("alertType", "success");
+                } else {
+                    request.setAttribute("message", "Delivery created, but failed to update reservation status.");
+                    request.setAttribute("alertType", "warning");
+                }
+
+            } else {
+                request.setAttribute("message", "Failed to arrange delivery. Please try again.");
+                request.setAttribute("alertType", "danger");
+            }
+            List<Reservation> reservations = reservationDB.getPendingReservations();
+            request.setAttribute("reservations", reservations);
+
+            // Forward back to the delivery arrangement page
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./warehouseStaff/arrangeDeliveriesToShop.jsp?action=view_toShop");
+            dispatcher.forward(request, response);
         }
 
     }
