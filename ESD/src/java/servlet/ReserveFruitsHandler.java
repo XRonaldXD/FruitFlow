@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import models.CountryReservation;
 import models.Fruit;
 
 /**
@@ -74,9 +75,34 @@ public class ReserveFruitsHandler extends HttpServlet {
                 request.setAttribute("message", "Reservation failed. Please try again.");
                 request.setAttribute("alertType", "danger"); // Bootstrap alert type
             }
-
 // Forward the request back to the same page
             RequestDispatcher dispatcher = request.getRequestDispatcher("/bakeryShopStaff/reserveFruits.jsp?action=view");
+            dispatcher.forward(request, response);
+
+        } else if (action.equals("view_warehouse")) {
+            List<CountryReservation> countryReservations = reservationDB.getTotalReservationsByCountryAndFruit();
+
+            request.setAttribute("countryReservations", countryReservations);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./warehouseStaff/reservations.jsp");
+            dispatcher.forward(request, response);
+        } else if (action.equals("approve")) {
+            int countryId = Integer.parseInt(request.getParameter("countryId"));
+            int fruitId = Integer.parseInt(request.getParameter("fruitId"));
+            boolean success = false;
+            success = reservationDB.updateReservationStatusByCountryAndFruit(countryId, fruitId, "Approved");
+            // Set success or failure message
+            if (success) {
+                request.setAttribute("message", "Reservation successfully " + action + "d!");
+                request.setAttribute("alertType", "success");
+            } else {
+                request.setAttribute("message", "Failed to " + action + " reservation. Please try again.");
+                request.setAttribute("alertType", "danger");
+            }
+            // Fetch updated reservations and forward back to the JSP
+            List<CountryReservation> countryReservations = reservationDB.getTotalReservationsByCountryAndFruit();
+            request.setAttribute("countryReservations", countryReservations);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./warehouseStaff/reservations.jsp");
             dispatcher.forward(request, response);
         }
     }

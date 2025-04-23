@@ -87,7 +87,6 @@
                             <label for="reservationDate" class="form-label">Reservation Date</label>
                             <input type="date" class="form-control" id="reservationDate" name="reservationDate" required>
                         </div>
-
                         <!-- Submit Button -->
                         <button type="submit" class="btn btn-primary">Reserve</button>
                     </form>

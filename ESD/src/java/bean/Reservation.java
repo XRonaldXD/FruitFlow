@@ -5,6 +5,7 @@
 package bean;
 
 import db.FruitDB;
+import db.WarehouseDB;
 
 /**
  *
@@ -14,7 +15,8 @@ public class Reservation {
 
     private int reservationId;
     private int fruitId;
-    private int shopId;
+    private Integer shopId;
+    private Integer warehouseId;
     private int quantity;
     private String reservationDate;
     private String status; // e.g., "Pending", "Approved"
@@ -23,10 +25,11 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(int reservationId, int fruitId, int shopId, int quantity, String reservationDate, String status) {
+    public Reservation(int reservationId, int fruitId, Integer shopId, Integer warehouseId, int quantity, String reservationDate, String status) {
         this.reservationId = reservationId;
         this.fruitId = fruitId;
         this.shopId = shopId;
+        this.warehouseId = warehouseId;
         this.quantity = quantity;
         this.reservationDate = reservationDate;
         this.status = status;
@@ -35,6 +38,11 @@ public class Reservation {
     public String getFruitName() {
         FruitDB fruitDB = new FruitDB("jdbc:mysql://localhost:3306/esd_assignment", "root", "");
         return fruitDB.getFruitNameById(this.fruitId); // Fetch fruitName using fruitId
+    }
+    
+    public String getWarehouseName(){
+        WarehouseDB warehouseDB = new WarehouseDB("jdbc:mysql://localhost:3306/esd_assignment", "root", "");
+        return warehouseDB.getWarehouseNameById(this.warehouseId);
     }
 
     // Getters and Setters
@@ -54,12 +62,20 @@ public class Reservation {
         this.fruitId = fruitId;
     }
 
-    public int getShopId() {
+    public Integer getShopId() {
         return shopId;
     }
 
-    public void setShopId(int shopId) {
+    public void setShopId(Integer shopId) {
         this.shopId = shopId;
+    }
+    
+    public Integer getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(Integer warehouseId) {
+        this.warehouseId = warehouseId;
     }
 
     public int getQuantity() {

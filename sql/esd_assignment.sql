@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1:3306
--- 產生時間： 2025-04-23 08:59:15
+-- 產生時間： 2025-04-23 11:53:43
 -- 伺服器版本： 8.2.0
 -- PHP 版本： 8.2.13
 
@@ -108,15 +108,28 @@ INSERT INTO `countries` (`country_id`, `country_name`) VALUES
 DROP TABLE IF EXISTS `deliveries`;
 CREATE TABLE IF NOT EXISTS `deliveries` (
   `delivery_id` int NOT NULL AUTO_INCREMENT,
+  `reservation_id` int NOT NULL,
   `fruit_id` int NOT NULL,
-  `from_location` varchar(255) NOT NULL,
-  `to_location` varchar(255) NOT NULL,
+  `from_warehouse_id` int NOT NULL,
+  `to_warehouse_id` int DEFAULT NULL,
+  `to_shop_id` int DEFAULT NULL,
   `quantity` int NOT NULL,
   `delivery_date` date NOT NULL,
   `status` enum('In Transit','Delivered') DEFAULT 'In Transit',
   PRIMARY KEY (`delivery_id`),
-  KEY `fruit_id` (`fruit_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `fruit_id` (`fruit_id`),
+  KEY `reservation_id` (`reservation_id`),
+  KEY `from_warehouse_id` (`from_warehouse_id`),
+  KEY `to_warehouse_id` (`to_warehouse_id`),
+  KEY `to_shop_id` (`to_shop_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- 傾印資料表的資料 `deliveries`
+--
+
+INSERT INTO `deliveries` (`delivery_id`, `reservation_id`, `fruit_id`, `from_warehouse_id`, `to_warehouse_id`, `to_shop_id`, `quantity`, `delivery_date`, `status`) VALUES
+(1, 12, 2, 1, 22, NULL, 500, '2025-04-30', 'In Transit');
 
 -- --------------------------------------------------------
 
@@ -151,26 +164,33 @@ INSERT INTO `fruits` (`fruit_id`, `fruit_name`, `source_location`) VALUES
 DROP TABLE IF EXISTS `reservations`;
 CREATE TABLE IF NOT EXISTS `reservations` (
   `reservation_id` int NOT NULL AUTO_INCREMENT,
-  `shop_id` int NOT NULL,
+  `shop_id` int DEFAULT NULL,
+  `warehouse_id` int DEFAULT NULL,
   `fruit_id` int NOT NULL,
   `quantity` int NOT NULL,
   `reservation_date` date NOT NULL,
-  `status` enum('Pending','Approved','Rejected') DEFAULT 'Pending',
+  `status` enum('Pending','Approved','Rejected','In Transit') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'Pending',
   PRIMARY KEY (`reservation_id`),
   KEY `fruit_id` (`fruit_id`),
-  KEY `shop_id` (`shop_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `shop_id` (`shop_id`),
+  KEY `warehouses_id` (`warehouse_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 傾印資料表的資料 `reservations`
 --
 
-INSERT INTO `reservations` (`reservation_id`, `shop_id`, `fruit_id`, `quantity`, `reservation_date`, `status`) VALUES
-(1, 1, 2, 500, '2025-04-22', 'Pending'),
-(2, 1, 1, 500, '2025-04-26', 'Pending'),
-(3, 1, 3, 100, '2025-04-20', 'Pending'),
-(4, 1, 1, 50, '2025-04-29', 'Pending'),
-(5, 1, 2, 100, '2025-04-25', 'Pending');
+INSERT INTO `reservations` (`reservation_id`, `shop_id`, `warehouse_id`, `fruit_id`, `quantity`, `reservation_date`, `status`) VALUES
+(1, 1, NULL, 2, 500, '2025-04-22', 'Approved'),
+(2, 1, NULL, 1, 500, '2025-04-26', 'Rejected'),
+(3, 1, NULL, 3, 100, '2025-04-20', 'Approved'),
+(4, 1, NULL, 1, 50, '2025-04-29', 'Rejected'),
+(5, 1, NULL, 2, 100, '2025-04-25', 'Approved'),
+(7, 3, NULL, 3, 1000, '2025-04-29', 'Approved'),
+(8, 3, NULL, 2, 150, '2025-04-30', 'Pending'),
+(9, 3, NULL, 1, 100, '2025-04-21', 'Pending'),
+(11, 3, NULL, 1, 500, '2025-04-28', 'Pending'),
+(12, NULL, 22, 2, 500, '2025-04-28', 'In Transit');
 
 -- --------------------------------------------------------
 
@@ -249,7 +269,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `email` (`email`),
   KEY `shop_id` (`shop_id`),
   KEY `warehouse_id` (`warehouse_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 傾印資料表的資料 `users`
@@ -257,7 +277,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `role`, `shop_id`, `warehouse_id`) VALUES
 (1, 'Ronald Sham', 'RonaldSham@gmail.com', '12345678', 'BakeryShopStaff', 1, NULL),
-(4, 'Chim Sir', 'ChimSir@gmail.com', '246810', 'WarehouseStaff', NULL, 1);
+(4, 'Chim Sir', 'ChimSir@gmail.com', '246810', 'WarehouseStaff', NULL, 1),
+(5, 'Annie Sham', 'AnnieSham@gmail.com', '1357911', 'BakeryShopStaff', 3, NULL);
 
 -- --------------------------------------------------------
 
@@ -272,14 +293,15 @@ CREATE TABLE IF NOT EXISTS `warehouses` (
   `country_id` int NOT NULL,
   PRIMARY KEY (`warehouse_id`),
   KEY `country_id` (`country_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 傾印資料表的資料 `warehouses`
 --
 
 INSERT INTO `warehouses` (`warehouse_id`, `warehouse_name`, `country_id`) VALUES
-(1, 'Japan Central Warehouse', 1);
+(1, 'Japan Central Warehouse', 1),
+(22, 'Hong Kong Central Warehouse', 3);
 
 --
 -- 已傾印資料表的限制式
@@ -303,14 +325,19 @@ ALTER TABLE `cities`
 -- 資料表的限制式 `deliveries`
 --
 ALTER TABLE `deliveries`
-  ADD CONSTRAINT `deliveries_ibfk_1` FOREIGN KEY (`fruit_id`) REFERENCES `fruits` (`fruit_id`);
+  ADD CONSTRAINT `deliveries_ibfk_1` FOREIGN KEY (`fruit_id`) REFERENCES `fruits` (`fruit_id`),
+  ADD CONSTRAINT `deliveries_ibfk_2` FOREIGN KEY (`from_warehouse_id`) REFERENCES `warehouses` (`warehouse_id`),
+  ADD CONSTRAINT `deliveries_ibfk_3` FOREIGN KEY (`to_warehouse_id`) REFERENCES `warehouses` (`warehouse_id`),
+  ADD CONSTRAINT `deliveries_ibfk_4` FOREIGN KEY (`reservation_id`) REFERENCES `reservations` (`reservation_id`),
+  ADD CONSTRAINT `deliveries_ibfk_5` FOREIGN KEY (`to_shop_id`) REFERENCES `shops` (`shop_id`);
 
 --
 -- 資料表的限制式 `reservations`
 --
 ALTER TABLE `reservations`
   ADD CONSTRAINT `reservations_ibfk_1` FOREIGN KEY (`fruit_id`) REFERENCES `fruits` (`fruit_id`),
-  ADD CONSTRAINT `reservations_ibfk_2` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`shop_id`);
+  ADD CONSTRAINT `reservations_ibfk_2` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`shop_id`),
+  ADD CONSTRAINT `reservations_ibfk_3` FOREIGN KEY (`warehouse_id`) REFERENCES `warehouses` (`warehouse_id`);
 
 --
 -- 資料表的限制式 `shops`
