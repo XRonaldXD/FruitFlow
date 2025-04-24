@@ -5,6 +5,7 @@
 package servlet;
 
 import bean.User;
+import db.FruitDB;
 import java.sql.*;
 import db.UserDB;
 import jakarta.servlet.RequestDispatcher;
@@ -16,6 +17,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
+import models.Fruit;
+import models.ShopStock;
 
 /**
  *
@@ -25,6 +29,7 @@ import jakarta.servlet.http.HttpSession;
 public class LoginHandler extends HttpServlet {
 
     private UserDB userDB;
+    private FruitDB fruitDB;
 
     public void init() {
         String dbUrl = this.getServletContext().getInitParameter("dbUrl");
@@ -32,6 +37,7 @@ public class LoginHandler extends HttpServlet {
         String dbPassword = this.getServletContext().getInitParameter("dbPassword");
 
         userDB = new UserDB(dbUrl, dbUser, dbPassword);
+        fruitDB = new FruitDB(dbUrl, dbUser, dbPassword);
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -43,28 +49,52 @@ public class LoginHandler extends HttpServlet {
             if (isValid) {    //login
                 User user = userDB.getUser(username, password);
                 String role = userDB.getRole(username, password);
-                
+
                 HttpSession session = request.getSession(true);
                 session.setAttribute("user", user);
 
-                doLogin(request, response, role);
+                doLogin(request, response, user);
+            } else {
+                request.setAttribute("errorMessage", "Invalid username or password. Please try again.");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
+                dispatcher.forward(request, response);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    protected void doLogin(HttpServletRequest request, HttpServletResponse response, String role)
+    protected void doLogin(HttpServletRequest request, HttpServletResponse response, User user)
             throws ServletException, IOException {
 
         String targetURL = "login.jsp"; // Default to login page
+        String role = user.getRole();
 
         if (role.equals("BakeryShopStaff")) {
             // Bakery Shop Staff
+            
+            int shopId = (user.getShopId()); // Current shop ID
+            int cityId = fruitDB.getCityId(shopId);
+
+            // Fetch stock data
+            List<Fruit> shopStock = fruitDB.getStockByShop(shopId); // Stock for the current shop
+            List<ShopStock> cityStock = fruitDB.getStockByCity(cityId, shopId); // Stock for other shops in the same city
+
+            // Set attributes for the JSP
+            request.setAttribute("shopStock", shopStock);
+            request.setAttribute("cityStock", cityStock);
+
+            // Forward to the JSP
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/bakeryShopStaff/dashboard.jsp");
+            dispatcher.forward(request, response);
+
             response.sendRedirect("./bakeryShopStaff/dashboard.jsp");
         } else if (role.equals("WarehouseStaff")) {
             // Warehouse Staff
             response.sendRedirect("./warehouseStaff/dashboard.jsp");
+        } else if (role.equals("SeniorManagement")) {
+            // Senior Management
+            response.sendRedirect("./seniorManagement/dashboard.jsp");
         } else {
             targetURL = "/login.jsp"; // Default to login page
         }

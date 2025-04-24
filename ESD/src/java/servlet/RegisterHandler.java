@@ -43,19 +43,31 @@ public class RegisterHandler extends HttpServlet {
 
         PrintWriter out = response.getWriter();
 
-        if (!isValid) {
+        if (!isValid) { // User does not exist, proceed with registration
+
             if (role.equals("BakeryShopStaff")) {
                 int shopID = Integer.parseInt(request.getParameter("shopID"));
-                userID = userDB.createUser(username, email, password, role, shopID);
+                userID = userDB.createUser(username, email, password, role, shopID); // Register Bakery Shop Staff
             } else if (role.equals("WarehouseStaff")) {
                 int warehouseID = Integer.parseInt(request.getParameter("warehouseID"));
-                userID = userDB.createUser(username, email, password, role, warehouseID); // Pass null for shopID
+                userID = userDB.createUser(username, email, password, role, warehouseID); // Register Warehouse Staff
             }
+
+            if (userID > 0) {
+                request.setAttribute("message", "Registration successful! You can now log in.");
+                request.setAttribute("alertType", "success");
+            } else {
+                request.setAttribute("message", "Registration failed. Please try again.");
+                request.setAttribute("alertType", "danger");
+            }
+        } else { // User already exists
+            request.setAttribute("message", "User already exists with the provided username or email.");
+            request.setAttribute("alertType", "warning");
         }
-        String targetURL = "login.jsp";
-        RequestDispatcher rd;
-        rd = getServletContext().getRequestDispatcher("/" + targetURL);
-        rd.forward(request, response);
+
+// Forward back to the registration page
+        RequestDispatcher dispatcher = request.getRequestDispatcher("register.jsp");
+        dispatcher.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -41,15 +41,30 @@ public class Reservation {
         FruitDB fruitDB = new FruitDB("jdbc:mysql://localhost:3306/esd_assignment", "root", "");
         return fruitDB.getFruitNameById(this.fruitId); // Fetch fruitName using fruitId
     }
-    
-    public String getWarehouseName(){
+
+    public String getWarehouseName() {
+        if(this.warehouseId == null){
+            return "N/A";
+        }
         WarehouseDB warehouseDB = new WarehouseDB("jdbc:mysql://localhost:3306/esd_assignment", "root", "");
         return warehouseDB.getWarehouseNameById(this.warehouseId);
     }
-    
-    public String getShopName(){
-       ShopDB shopDB = new ShopDB("jdbc:mysql://localhost:3306/esd_assignment", "root", "");
-       return shopDB.getShopById(this.shopId).getShopName();
+
+    public String getShopName() {
+        if(this.shopId == null){
+            return "N/A";
+        }
+        ShopDB shopDB = new ShopDB("jdbc:mysql://localhost:3306/esd_assignment", "root", "");
+        return shopDB.getShopById(this.shopId).getShopName();
+    }
+
+    public String getCountryName() {
+        if(this.shopId == null){
+            return "N/A";
+        }
+        ShopDB shopDB = new ShopDB("jdbc:mysql://localhost:3306/esd_assignment", "root", "");
+        CityDB cityDB = new CityDB("jdbc:mysql://localhost:3306/esd_assignment", "root", "");
+        return cityDB.getCityById(shopDB.getShopById(this.shopId).getCityId()).getCityName();
     }
 
     // Getters and Setters
@@ -76,7 +91,7 @@ public class Reservation {
     public void setShopId(Integer shopId) {
         this.shopId = shopId;
     }
-    
+
     public Integer getWarehouseId() {
         return warehouseId;
     }

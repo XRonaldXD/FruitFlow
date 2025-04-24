@@ -17,6 +17,15 @@
         <div class="login-form">
             <h2 class="text-center">Login</h2>
             <h6 class="text-center">Welcome Member</h6>
+            <!-- Display error message if it exists -->
+            <%
+                String errorMessage = (String) request.getAttribute("errorMessage");
+                if (errorMessage != null) {
+            %>
+            <div class="alert alert-danger text-center">
+                <%= errorMessage%>
+            </div>
+            <% }%>
             <form action="LoginHandler" method="POST">
                 <div class="form-group">
                     <label for="username">Username</label>

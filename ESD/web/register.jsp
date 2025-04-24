@@ -18,6 +18,16 @@
         <div class="register-form">
             <a href="./login.jsp">Back</a>
             <h2 class="text-center">Register</h2>
+            <!-- Display alert messages -->
+            <%
+                String message = (String) request.getAttribute("message");
+                String alertType = (String) request.getAttribute("alertType");
+                if (message != null && alertType != null) {
+            %>
+            <div class="alert alert-<%= alertType%> alert-dismissible fade show" role="alert">
+                <%= message%>
+            </div>
+            <% }%>
 
             <p class="text-center">
                 <button class="btn btn-primary" data-toggle="collapse" data-target="#shopStaff" aria-expanded="false" aria-controls="shopStaff" onclick="toggleCollapse('warehouseStaff')">

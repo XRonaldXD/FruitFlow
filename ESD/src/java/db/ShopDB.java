@@ -45,7 +45,7 @@ public class ShopDB {
 
         return shop;
     }
-
+    
     // Fetch all shops in a specific city
     public List<Shop> getShopsByCity(int cityId) {
         List<Shop> shops = new ArrayList<>();

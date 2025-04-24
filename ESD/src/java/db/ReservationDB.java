@@ -9,6 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import models.CountryReservation;
+import models.ReserveReport;
 
 /**
  *
@@ -49,6 +50,38 @@ public class ReservationDB {
         }
 
         return false; // Return false if an error occurred
+    }
+
+    public List<Reservation> getAllReservations() {
+        List<Reservation> reservations = new ArrayList<>();
+        String sql = "SELECT "
+                + "r.reservation_id, "
+                + "r.fruit_id, "
+                + "r.shop_id, "
+                + "r.warehouse_id, "
+                + "r.quantity, "
+                + "r.reservation_date, "
+                + "r.status "
+                + "FROM reservations r";
+
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                int reservationId = rs.getInt("reservation_id");
+                int fruitId = rs.getInt("fruit_id");
+                Integer shopId = rs.getObject("shop_id") != null ? rs.getInt("shop_id") : null; // Handle nullable shopId
+                Integer warehouseId = rs.getObject("warehouse_id") != null ? rs.getInt("warehouse_id") : null; // Handle nullable warehouseId
+                int quantity = rs.getInt("quantity");
+                String reservationDate = rs.getString("reservation_date");
+                String status = rs.getString("status");
+
+                reservations.add(new Reservation(reservationId, fruitId, shopId, warehouseId, quantity, reservationDate, status));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return reservations;
     }
 
     // Get all reservations for a specific shop
@@ -219,5 +252,83 @@ public class ReservationDB {
         }
 
         return countryReservations;
+    }
+
+    public List<ReserveReport> getReserveNeeds(String filterType, int filterId) {
+        List<ReserveReport> report = new ArrayList<>();
+        String sql = "";
+
+        if (filterType.equals("shop")) {
+            sql = "SELECT f.fruit_name, SUM(r.quantity) AS total_quantity "
+                    + "FROM reservations r "
+                    + "JOIN fruits f ON r.fruit_id = f.fruit_id "
+                    + "WHERE r.shop_id = ? AND r.status = 'Pending' "
+                    + "GROUP BY f.fruit_name";
+        } else if (filterType.equals("city")) {
+            sql = "SELECT f.fruit_name, SUM(r.quantity) AS total_quantity "
+                    + "FROM reservations r "
+                    + "JOIN fruits f ON r.fruit_id = f.fruit_id "
+                    + "WHERE r.city_id = ? AND r.status = 'Pending' "
+                    + "GROUP BY f.fruit_name";
+        } else if (filterType.equals("country")) {
+            sql = "SELECT f.fruit_name, SUM(r.quantity) AS total_quantity "
+                    + "FROM reservations r "
+                    + "JOIN fruits f ON r.fruit_id = f.fruit_id "
+                    + "WHERE r.country_id = ? AND r.status = 'Pending' "
+                    + "GROUP BY f.fruit_name";
+        }
+
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, filterId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String fruitName = rs.getString("fruit_name");
+                int totalQuantity = rs.getInt("total_quantity");
+
+                report.add(new ReserveReport(fruitName, totalQuantity));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return report;
+    }
+
+    public List<ReserveReport> getReserveNeedsForAllShops(String filterType) {
+        List<ReserveReport> report = new ArrayList<>();
+        String sql = "";
+
+        if (filterType.equals("city")) {
+            sql = "SELECT f.fruit_name, SUM(r.quantity) AS total_quantity "
+                    + "FROM reservations r "
+                    + "JOIN fruits f ON r.fruit_id = f.fruit_id "
+                    + "JOIN shops s ON r.shop_id = s.shop_id "
+                    + "WHERE r.status = 'Pending' "
+                    + "GROUP BY f.fruit_name";
+        } else if (filterType.equals("country")) {
+            sql = "SELECT f.fruit_name, SUM(r.quantity) AS total_quantity "
+                    + "FROM reservations r "
+                    + "JOIN fruits f ON r.fruit_id = f.fruit_id "
+                    + "JOIN shops s ON r.shop_id = s.shop_id "
+                    + "JOIN cities c ON s.city_id = c.city_id "
+                    + "WHERE r.status = 'Pending' "
+                    + "GROUP BY f.fruit_name";
+        }
+
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String fruitName = rs.getString("fruit_name");
+                int totalQuantity = rs.getInt("total_quantity");
+
+                report.add(new ReserveReport(fruitName, totalQuantity));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return report;
     }
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1:3306
--- 產生時間： 2025-04-23 12:43:58
+-- 產生時間： 2025-04-24 19:20:24
 -- 伺服器版本： 8.2.0
 -- PHP 版本： 8.2.13
 
@@ -75,6 +75,34 @@ INSERT INTO `cities` (`city_id`, `city_name`, `country_id`) VALUES
 (1, 'Tokyo', 1),
 (2, 'New York', 2),
 (3, 'Hong Kong', 3);
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `consumption`
+--
+
+DROP TABLE IF EXISTS `consumption`;
+CREATE TABLE IF NOT EXISTS `consumption` (
+  `consumption_id` int NOT NULL AUTO_INCREMENT,
+  `shop_id` int NOT NULL,
+  `fruit_id` int NOT NULL,
+  `quantity` int NOT NULL,
+  `consumption_date` date NOT NULL,
+  `season` enum('Spring','Summer','Autumn','Winter') NOT NULL,
+  PRIMARY KEY (`consumption_id`),
+  KEY `shop_id` (`shop_id`),
+  KEY `fruit_id` (`fruit_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- 傾印資料表的資料 `consumption`
+--
+
+INSERT INTO `consumption` (`consumption_id`, `shop_id`, `fruit_id`, `quantity`, `consumption_date`, `season`) VALUES
+(1, 1, 1, 500, '2025-07-08', 'Summer'),
+(2, 1, 2, 1000, '2025-04-24', 'Spring'),
+(3, 1, 3, 5000, '2025-04-17', 'Spring');
 
 -- --------------------------------------------------------
 
@@ -275,7 +303,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `email` (`email`),
   KEY `shop_id` (`shop_id`),
   KEY `warehouse_id` (`warehouse_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 傾印資料表的資料 `users`
@@ -284,7 +312,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `role`, `shop_id`, `warehouse_id`) VALUES
 (1, 'Ronald Sham', 'RonaldSham@gmail.com', '12345678', 'BakeryShopStaff', 1, NULL),
 (4, 'Chim Sir', 'ChimSir@gmail.com', '246810', 'WarehouseStaff', NULL, 1),
-(5, 'Annie Sham', 'AnnieSham@gmail.com', '1357911', 'BakeryShopStaff', 3, NULL);
+(5, 'Annie Sham', 'AnnieSham@gmail.com', '1357911', 'BakeryShopStaff', 3, NULL),
+(6, 'admin', 'admin@admin.com', 'admin', 'SeniorManagement', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -326,6 +355,13 @@ ALTER TABLE `borrowing`
 --
 ALTER TABLE `cities`
   ADD CONSTRAINT `cities_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `countries` (`country_id`);
+
+--
+-- 資料表的限制式 `consumption`
+--
+ALTER TABLE `consumption`
+  ADD CONSTRAINT `consumption_ibfk_1` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`shop_id`),
+  ADD CONSTRAINT `consumption_ibfk_2` FOREIGN KEY (`fruit_id`) REFERENCES `fruits` (`fruit_id`);
 
 --
 -- 資料表的限制式 `deliveries`
