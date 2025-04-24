@@ -18,7 +18,7 @@
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Senior Management Dashboard</a>
+                <a class="navbar-brand" href="./dashboard.jsp">Senior Management Dashboard</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -49,8 +49,7 @@
                     <h3 class="card-title">Actions</h3>
                     <div class="d-grid gap-2">
                         <a href="../AdminHandler?action=viewReserveNeeds" class="btn btn-primary">View Reserve Needs</a>
-
-                        <a href="generateReports.jsp" class="btn btn-success">Generate Reports</a>
+                        <a href="../ConsumptionHandler?action=view_consumptionRecords" class="btn btn-success">View Consumption Records</a>
                         <a href="manageUsers.jsp" class="btn btn-warning">Manage Users</a>
                         <a href="manageFruits.jsp" class="btn btn-info">Manage Fruit Types</a>
                     </div>

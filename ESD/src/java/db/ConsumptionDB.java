@@ -7,7 +7,7 @@ package db;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import models.ConsumptionReport;
+import models.ConsumptionRecord;
 
 public class ConsumptionDB {
 
@@ -27,75 +27,42 @@ public class ConsumptionDB {
         return DriverManager.getConnection(dbUrl, dbUser, dbPassword);
     }
 
-    // Fetch consumption records by shop, city, or country under a specific season
-    public List<ConsumptionReport> getConsumptionRecords(String filterType, int filterId, String season) {
-        List<ConsumptionReport> report = new ArrayList<>();
-        String sql = "";
-
-        if (filterType.equals("shop")) {
-            sql = "SELECT f.fruit_name, SUM(c.quantity) AS total_quantity "
-                    + "FROM consumption c "
-                    + "JOIN fruits f ON c.fruit_id = f.fruit_id "
-                    + "WHERE c.shop_id = ? AND c.season = ? "
-                    + "GROUP BY f.fruit_name";
-        } else if (filterType.equals("city")) {
-            sql = "SELECT f.fruit_name, SUM(c.quantity) AS total_quantity "
-                    + "FROM consumption c "
-                    + "JOIN fruits f ON c.fruit_id = f.fruit_id "
-                    + "JOIN shops s ON c.shop_id = s.shop_id "
-                    + "WHERE s.city_id = ? AND c.season = ? "
-                    + "GROUP BY f.fruit_name";
-        } else if (filterType.equals("country")) {
-            sql = "SELECT f.fruit_name, SUM(c.quantity) AS total_quantity "
-                    + "FROM consumption c "
-                    + "JOIN fruits f ON c.fruit_id = f.fruit_id "
-                    + "JOIN shops s ON c.shop_id = s.shop_id "
-                    + "JOIN cities ci ON s.city_id = ci.city_id "
-                    + "WHERE ci.country_id = ? AND c.season = ? "
-                    + "GROUP BY f.fruit_name";
-        }
-
-        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, filterId);
-            stmt.setString(2, season);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                String fruitName = rs.getString("fruit_name");
-                int totalQuantity = rs.getInt("total_quantity");
-
-                report.add(new ConsumptionReport(fruitName, totalQuantity));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return report;
-    }
-
-    // Fetch all consumption records (optional method for general reporting)
-    public List<ConsumptionReport> getAllConsumptionRecords() {
-        List<ConsumptionReport> report = new ArrayList<>();
-        String sql = "SELECT f.fruit_name, SUM(c.quantity) AS total_quantity, c.season "
+    public List<ConsumptionRecord> getAllConsumptionRecords() {
+        List<ConsumptionRecord> records = new ArrayList<>();
+        String sql = "SELECT "
+                + "c.consumption_id, "
+                + "s.shop_name, "
+                + "ci.city_name, "
+                + "co.country_name, "
+                + "f.fruit_name, "
+                + "c.quantity, "
+                + "c.consumption_date, "
+                + "c.season "
                 + "FROM consumption c "
-                + "JOIN fruits f ON c.fruit_id = f.fruit_id "
-                + "GROUP BY f.fruit_name, c.season";
+                + "JOIN shops s ON c.shop_id = s.shop_id "
+                + "JOIN cities ci ON s.city_id = ci.city_id "
+                + "JOIN countries co ON ci.country_id = co.country_id "
+                + "JOIN fruits f ON c.fruit_id = f.fruit_id";
 
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
+                int consumptionId = rs.getInt("consumption_id");
+                String shopName = rs.getString("shop_name");
+                String cityName = rs.getString("city_name");
+                String countryName = rs.getString("country_name");
                 String fruitName = rs.getString("fruit_name");
-                int totalQuantity = rs.getInt("total_quantity");
+                int quantity = rs.getInt("quantity");
+                String consumptionDate = rs.getString("consumption_date");
                 String season = rs.getString("season");
 
-                report.add(new ConsumptionReport(fruitName, totalQuantity, season));
+                records.add(new ConsumptionRecord(consumptionId, shopName, cityName, countryName, fruitName, quantity, consumptionDate, season));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return report;
+        return records;
     }
 
     public boolean addConsumption(int shopId, int fruitId, int quantity, String consumptionDate, String season) {
@@ -104,19 +71,20 @@ public class ConsumptionDB {
 
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
+            // Set parameters for the query
             stmt.setInt(1, shopId);
             stmt.setInt(2, fruitId);
             stmt.setInt(3, quantity);
             stmt.setString(4, consumptionDate);
             stmt.setString(5, season);
 
-            int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+            // Execute the update
+            int rowsInserted = stmt.executeUpdate();
+            return rowsInserted > 0; // Return true if at least one row was inserted
         } catch (SQLException e) {
             e.printStackTrace();
+            return false; // Return false if an exception occurs
         }
-
-        return false;
     }
-    
+
 }

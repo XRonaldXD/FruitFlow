@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1:3306
--- 產生時間： 2025-04-24 19:20:24
+-- 產生時間： 2025-04-24 20:06:57
 -- 伺服器版本： 8.2.0
 -- PHP 版本： 8.2.13
 
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `borrowing` (
   KEY `fruit_id` (`fruit_id`),
   KEY `to_shop_id` (`to_shop_id`),
   KEY `from_shop_id` (`from_shop_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 傾印資料表的資料 `borrowing`
@@ -49,7 +49,8 @@ CREATE TABLE IF NOT EXISTS `borrowing` (
 INSERT INTO `borrowing` (`borrow_id`, `from_shop_id`, `to_shop_id`, `fruit_id`, `quantity`, `borrow_date`, `status`) VALUES
 (1, 3, 1, 2, 100, '2025-04-26', 'Pending'),
 (2, 4, 1, 1, 500, '2025-04-29', 'Pending'),
-(3, 1, 1, 3, 250, '2025-04-30', 'Pending');
+(3, 1, 1, 3, 250, '2025-04-30', 'Pending'),
+(4, 4, 1, 2, 250, '2025-04-29', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -208,7 +209,7 @@ CREATE TABLE IF NOT EXISTS `reservations` (
   KEY `fruit_id` (`fruit_id`),
   KEY `shop_id` (`shop_id`),
   KEY `warehouses_id` (`warehouse_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 傾印資料表的資料 `reservations`
@@ -224,7 +225,8 @@ INSERT INTO `reservations` (`reservation_id`, `shop_id`, `warehouse_id`, `fruit_
 (8, 3, NULL, 2, 150, '2025-04-30', 'In Transit'),
 (9, 3, NULL, 1, 100, '2025-04-21', 'In Transit'),
 (11, 3, NULL, 1, 500, '2025-04-28', 'Pending'),
-(12, NULL, 22, 2, 500, '2025-04-28', 'In Transit');
+(12, NULL, 22, 2, 500, '2025-04-28', 'In Transit'),
+(13, 1, NULL, 2, 100, '2025-04-30', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -268,7 +270,7 @@ CREATE TABLE IF NOT EXISTS `stock` (
   KEY `fruit_id` (`fruit_id`),
   KEY `shop_id` (`shop_id`),
   KEY `warehouse_id` (`warehouse_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 傾印資料表的資料 `stock`
@@ -276,12 +278,15 @@ CREATE TABLE IF NOT EXISTS `stock` (
 
 INSERT INTO `stock` (`stock_id`, `fruit_id`, `shop_id`, `warehouse_id`, `stock_level`) VALUES
 (1, 1, NULL, 1, 500),
-(4, 1, 1, NULL, 300),
+(4, 1, 1, NULL, 500),
 (5, 3, 4, NULL, 100),
-(6, 2, 1, NULL, 500),
-(7, 3, 1, NULL, 250),
+(6, 2, 1, NULL, 250),
+(7, 3, 1, NULL, 100),
 (8, 2, NULL, 1, 1500),
-(9, 3, NULL, 1, 200);
+(9, 3, NULL, 1, 200),
+(10, 1, 3, NULL, 300),
+(11, 2, 3, NULL, 500),
+(12, 3, 3, NULL, 100);
 
 -- --------------------------------------------------------
 

@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import models.ConsumptionRecord;
 import models.Fruit;
 
 /**
@@ -74,6 +75,16 @@ public class ConsumptionHandler extends HttpServlet {
 
             // Forward to the JSP
             RequestDispatcher dispatcher = request.getRequestDispatcher("./bakeryShopStaff/uploadConsumption.jsp");
+            dispatcher.forward(request, response);
+        } else if (action.equals("view_consumptionRecords")) {
+            // Fetch all consumption records
+            List<ConsumptionRecord> records = consumptionDB.getAllConsumptionRecords();
+
+            // Set records as a request attribute
+            request.setAttribute("records", records);
+
+            // Forward to the JSP
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./seniorManagement/consumptionRecords.jsp");
             dispatcher.forward(request, response);
         }
     }
