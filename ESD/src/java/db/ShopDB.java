@@ -47,14 +47,15 @@ public class ShopDB {
     }
     
     // Fetch all shops in a specific city
-    public List<Shop> getShopsByCity(int cityId) {
+    public List<Shop> getShopsByCity(int cityId, int shopId) {
         List<Shop> shops = new ArrayList<>();
-        String sql = "SELECT shop_id, shop_name, city_id FROM shops WHERE city_id = ?";
+        String sql = "SELECT shop_id, shop_name, city_id FROM shops WHERE city_id = ? AND shop_id != ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, cityId);
+            stmt.setInt(2, shopId);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {

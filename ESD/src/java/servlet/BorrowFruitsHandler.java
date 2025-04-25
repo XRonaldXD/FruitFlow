@@ -4,8 +4,9 @@
  */
 package servlet;
 
+import bean.Borrow;
 import bean.User;
-import db.BorrowingDB;
+import db.BorrowDB;
 import db.FruitDB;
 import db.ShopDB;
 import db.UserDB;
@@ -28,7 +29,7 @@ import models.Shop;
 @WebServlet(name = "BorrowFruitsHandler", urlPatterns = {"/BorrowFruitsHandler"})
 public class BorrowFruitsHandler extends HttpServlet {
 
-    private BorrowingDB borrowingDB;
+    private BorrowDB borrowDB;
     private FruitDB fruitDB;
     private ShopDB shopDB;
 
@@ -37,7 +38,7 @@ public class BorrowFruitsHandler extends HttpServlet {
         String dbUser = this.getServletContext().getInitParameter("dbUser");
         String dbPassword = this.getServletContext().getInitParameter("dbPassword");
 
-        borrowingDB = new BorrowingDB(dbUrl, dbUser, dbPassword);
+        borrowDB = new BorrowDB(dbUrl, dbUser, dbPassword);
         fruitDB = new FruitDB(dbUrl, dbUser, dbPassword);
         shopDB = new ShopDB(dbUrl, dbUser, dbPassword);
     }
@@ -49,9 +50,12 @@ public class BorrowFruitsHandler extends HttpServlet {
 
         if (action.equals("view")) {
             // Fetch the list of fruits from the database
+            int toShopId = user.getShopId();
+            List<Borrow> borrows = borrowDB.getBorrowRequestsByToShopId(toShopId); // Fetch current borrows
             List<Fruit> fruits = fruitDB.getAllFruits();
-            List<Shop> shops = shopDB.getShopsByCity(fruitDB.getCityId(user.getShopId()));
+            List<Shop> shops = shopDB.getShopsByCity(fruitDB.getCityId(user.getShopId()), user.getShopId());
             // Set the fruits list as a request attribute
+            request.setAttribute("borrows", borrows);
             request.setAttribute("fruits", fruits);
             request.setAttribute("shops", shops);
 
@@ -66,7 +70,7 @@ public class BorrowFruitsHandler extends HttpServlet {
             String borrowDate = request.getParameter("borrowDate");
 
             // Create borrow request
-            boolean success = borrowingDB.createBorrowRequest(fromShopId, toShopId, fruitId, quantity, borrowDate);
+            boolean success = borrowDB.createBorrowRequest(fromShopId, toShopId, fruitId, quantity, borrowDate);
 // Fetch the list of fruits from the database
             List<Fruit> fruits = fruitDB.getAllFruits();
             List<Shop> shops = shopDB.getAllShops();
@@ -85,6 +89,44 @@ public class BorrowFruitsHandler extends HttpServlet {
 
 // Forward the request back to the same page
             RequestDispatcher dispatcher = request.getRequestDispatcher("./bakeryShopStaff/borrowFruits.jsp");
+            dispatcher.forward(request, response);
+        } else if (action.equals("view_borrow")) {
+            int fromShopId = user.getShopId();
+            List<Borrow> borrows = borrowDB.getBorrowRequests(fromShopId);
+            request.setAttribute("borrows", borrows);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./bakeryShopStaff/approveBorrow.jsp");
+            dispatcher.forward(request, response);
+        } else if (action.equals("approve")) {
+            int borrowId = Integer.parseInt(request.getParameter("borrowId"));
+            boolean success = borrowDB.approveBorrow(borrowId);
+
+            if (success) {
+                request.setAttribute("message", "Borrow request approved successfully.");
+                request.setAttribute("alertType", "success");
+            } else {
+                request.setAttribute("message", "Failed to approve borrow request.");
+                request.setAttribute("alertType", "danger");
+            }
+            int fromShopId = user.getShopId();
+            List<Borrow> borrows = borrowDB.getBorrowRequests(fromShopId);
+            request.setAttribute("borrows", borrows);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./bakeryShopStaff/approveBorrow.jsp");
+            dispatcher.forward(request, response);
+        } else if (action.equals("reject")) {
+            int borrowId = Integer.parseInt(request.getParameter("borrowId"));
+            boolean success = borrowDB.rejectBorrow(borrowId);
+
+            if (success) {
+                request.setAttribute("message", "Borrow request rejected successfully.");
+                request.setAttribute("alertType", "success");
+            } else {
+                request.setAttribute("message", "Failed to reject borrow request.");
+                request.setAttribute("alertType", "danger");
+            }
+            int fromShopId = user.getShopId();
+            List<Borrow> borrows = borrowDB.getBorrowRequests(fromShopId);
+            request.setAttribute("borrows", borrows);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./bakeryShopStaff/approveBorrow.jsp");
             dispatcher.forward(request, response);
         }
     }

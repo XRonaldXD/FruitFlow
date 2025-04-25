@@ -4,6 +4,7 @@
     Author     : user
 --%>
 
+<%@page import="bean.Borrow"%>
 <%@page import="models.Shop"%>
 <%@page import="java.util.List"%>
 <%@page import="models.Fruit"%>
@@ -111,6 +112,48 @@
                         <!-- Submit Button -->
                         <button type="submit" class="btn btn-primary">Borrow</button>
                     </form>
+                </div>
+            </div>
+                            
+            <!-- Current Borrow List -->
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Current Borrow List</h3>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Borrow ID</th>
+                                <th>Borrow From</th>
+                                <th>Fruit</th>
+                                <th>Quantity</th>
+                                <th>Borrow Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%
+                                List<Borrow> borrows = (List<Borrow>) request.getAttribute("borrows");
+                                if (borrows != null && !borrows.isEmpty()) {
+                                    for (Borrow borrow : borrows) {
+                            %>
+                            <tr>
+                                <td><%= borrow.getBorrowId()%></td>
+                                <td><%= borrow.getFromShopName()%></td>
+                                <td><%= borrow.getFruitName()%></td>
+                                <td><%= borrow.getQuantity()%></td>
+                                <td><%= borrow.getBorrowDate()%></td>
+                                <td><%= borrow.getStatus()%></td>
+                            </tr>
+                            <%
+                                }
+                            } else {
+                            %>
+                            <tr>
+                                <td colspan="6">No current borrow requests found.</td>
+                            </tr>
+                            <% }%>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

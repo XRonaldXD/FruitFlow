@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1:3306
--- 產生時間： 2025-04-25 09:44:27
+-- 產生時間： 2025-04-25 11:36:28
 -- 伺服器版本： 8.2.0
 -- PHP 版本： 8.2.13
 
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `borrowing` (
   KEY `fruit_id` (`fruit_id`),
   KEY `to_shop_id` (`to_shop_id`),
   KEY `from_shop_id` (`from_shop_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 傾印資料表的資料 `borrowing`
@@ -49,8 +49,10 @@ CREATE TABLE IF NOT EXISTS `borrowing` (
 INSERT INTO `borrowing` (`borrow_id`, `from_shop_id`, `to_shop_id`, `fruit_id`, `quantity`, `borrow_date`, `status`) VALUES
 (1, 3, 1, 2, 100, '2025-04-26', 'Pending'),
 (2, 4, 1, 1, 500, '2025-04-29', 'Pending'),
-(3, 1, 1, 3, 250, '2025-04-30', 'Pending'),
-(4, 4, 1, 2, 250, '2025-04-29', 'Pending');
+(4, 4, 1, 2, 250, '2025-04-29', 'Pending'),
+(5, 1, 4, 2, 250, '2025-04-28', 'Approved'),
+(6, 1, 4, 5, 5000, '2025-04-28', 'Rejected'),
+(7, 4, 1, 1, 999, '2025-04-28', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -206,29 +208,30 @@ CREATE TABLE IF NOT EXISTS `reservations` (
   `fruit_id` int NOT NULL,
   `quantity` int NOT NULL,
   `reservation_date` date NOT NULL,
-  `status` enum('Pending','Approved','Rejected','In Transit') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'Pending',
+  `status` enum('Pending','Approved','Rejected','In Transit','Delivered') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'Pending',
   PRIMARY KEY (`reservation_id`),
   KEY `fruit_id` (`fruit_id`),
   KEY `shop_id` (`shop_id`),
   KEY `warehouses_id` (`warehouse_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 傾印資料表的資料 `reservations`
 --
 
 INSERT INTO `reservations` (`reservation_id`, `shop_id`, `warehouse_id`, `fruit_id`, `quantity`, `reservation_date`, `status`) VALUES
-(1, 1, NULL, 2, 500, '2025-04-22', 'Approved'),
+(1, 1, NULL, 2, 500, '2025-04-22', 'Delivered'),
 (2, 1, NULL, 1, 500, '2025-04-26', 'Rejected'),
 (3, 1, NULL, 3, 100, '2025-04-20', 'Approved'),
 (4, 1, NULL, 1, 50, '2025-04-29', 'Rejected'),
 (5, 1, NULL, 2, 100, '2025-04-25', 'Approved'),
 (7, 3, NULL, 3, 1000, '2025-04-29', 'Approved'),
 (8, 3, NULL, 2, 150, '2025-04-30', 'In Transit'),
-(9, 3, NULL, 1, 100, '2025-04-21', 'In Transit'),
-(11, 3, NULL, 1, 500, '2025-04-28', 'Pending'),
-(12, NULL, 22, 2, 500, '2025-04-28', 'In Transit'),
-(13, 1, NULL, 2, 100, '2025-04-30', 'Pending');
+(9, 3, NULL, 1, 100, '2025-04-21', 'Approved'),
+(11, 3, NULL, 1, 500, '2025-04-28', 'Approved'),
+(12, NULL, 22, 2, 500, '2025-04-28', 'Pending'),
+(13, 1, NULL, 2, 100, '2025-04-30', 'Pending'),
+(14, NULL, 1, 4, 5000, '2025-04-28', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -310,7 +313,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `email` (`email`),
   KEY `shop_id` (`shop_id`),
   KEY `warehouse_id` (`warehouse_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 傾印資料表的資料 `users`
@@ -319,7 +322,9 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `role`, `shop_id`, `warehouse_id`) VALUES
 (1, 'Ronald Sham', 'RonaldSham@gmail.com', '12345678', 'BakeryShopStaff', 1, NULL),
 (4, 'Chim Sir', 'ChimSir@gmail.com', '246810', 'WarehouseStaff', NULL, 1),
-(6, 'admin', 'admin@admin.com', 'admin', 'SeniorManagement', NULL, NULL);
+(6, 'admin', 'admin@admin.com', 'admin', 'SeniorManagement', NULL, NULL),
+(7, 'Annie Sham', 'AnnieSham@gmail.com', '1357911', 'BakeryShopStaff', 3, NULL),
+(8, 'Kenny S', 'KennyS@gmail.com', '123321', 'BakeryShopStaff', 4, NULL);
 
 -- --------------------------------------------------------
 
