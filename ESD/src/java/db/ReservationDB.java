@@ -51,6 +51,26 @@ public class ReservationDB {
 
         return false; // Return false if an error occurred
     }
+    
+    public boolean createReservationFromWarehouse(Integer warehouseId, int fruitId, int quantity, String reservationDate) {
+        String sql = "INSERT INTO reservations (warehouse_id, fruit_id, quantity, reservation_date, status) "
+                + "VALUES (?, ?, ?, ?, 'Pending')";
+
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, warehouseId);
+            stmt.setInt(2, fruitId);
+            stmt.setInt(3, quantity);
+            stmt.setString(4, reservationDate);
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0; // Return true if the reservation was successfully created
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false; // Return false if an error occurred
+    }
 
     public List<Reservation> getAllReservations() {
         List<Reservation> reservations = new ArrayList<>();
@@ -201,7 +221,7 @@ public class ReservationDB {
         List<Reservation> reservations = new ArrayList<>();
         String sql = "SELECT reservation_id, shop_id, fruit_id, warehouse_id, quantity, reservation_date, status "
                 + "FROM reservations "
-                + "WHERE status = 'Pending' AND warehouse_id IS NULL";
+                + "WHERE status != 'In Transit' AND status != 'Delivered' AND warehouse_id IS NULL";
 
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 

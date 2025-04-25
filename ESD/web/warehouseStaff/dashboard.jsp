@@ -49,6 +49,7 @@
                 <h3 class="card-title">Actions</h3>
                 <div class="d-grid gap-2">
                     <a href="../UpdateStockHandler?action=view_warehouse" class="btn btn-primary">View/Update Stock Levels</a>
+                    <a href="../ReserveFruitsHandler?action=reserveFruit_warehouse" class="btn btn-secondary">Reserve Fruits</a>
                     <a href="../ReserveFruitsHandler?action=view_warehouse" class="btn btn-success">Approve Reservations</a>
                     <a href="../DeliveriesHandler?action=view" class="btn btn-warning">Arrange Deliveries to Warehouse</a>
                     <a href="../DeliveriesHandler?action=view_toShop" class="btn btn-info">Arrange Deliveries to Bakery Shop</a>

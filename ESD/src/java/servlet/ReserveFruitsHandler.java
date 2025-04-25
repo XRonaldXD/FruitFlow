@@ -104,6 +104,43 @@ public class ReserveFruitsHandler extends HttpServlet {
 
             RequestDispatcher dispatcher = request.getRequestDispatcher("./warehouseStaff/reservations.jsp");
             dispatcher.forward(request, response);
+        } else if (action.equals("reserveFruit_warehouse")) {
+            // Fetch the list of fruits from the database
+            List<Fruit> fruits = fruitDB.getAllFruits();
+
+            // Set the fruits list as a request attribute
+            request.setAttribute("fruits", fruits);
+
+            // Forward the request to the JSP
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/warehouseStaff/reserveFruits.jsp");
+            dispatcher.forward(request, response);
+        } else if (action.equals("reserveFruit")) {
+            int fruitId = Integer.parseInt(request.getParameter("fruitId"));
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            String reservationDate = request.getParameter("reservationDate");
+
+            // Get shopId from session (assuming the user is logged in)
+            User user = (User) request.getSession().getAttribute("user");
+            int warehouseId = user.getWarehouseId();
+
+            // Save reservation to the database
+            boolean success = reservationDB.createReservationFromWarehouse(warehouseId, fruitId, quantity, reservationDate);
+            List<Fruit> fruits = fruitDB.getAllFruits();
+
+            // Set the fruits list as a request attribute
+            request.setAttribute("fruits", fruits);
+            if (success) {
+                // Set success message as a request attribute
+                request.setAttribute("message", "Reservation successful!");
+                request.setAttribute("alertType", "success"); // Bootstrap alert type
+            } else {
+                // Set failure message as a request attribute
+                request.setAttribute("message", "Reservation failed. Please try again.");
+                request.setAttribute("alertType", "danger"); // Bootstrap alert type
+            }
+// Forward the request back to the same page
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/warehouseStaff/reserveFruits.jsp?action=reserveFruit_warehouse");
+            dispatcher.forward(request, response);
         }
     }
 
