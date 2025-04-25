@@ -42,30 +42,60 @@
                     <p class="card-text">Role: Senior Management</p>
                 </div>
             </div>
-
-            <!-- Actions Section -->
             <div class="card mb-4">
                 <div class="card-body">
-                    <h3 class="card-title">Actions</h3>
-                    <div class="d-grid gap-2">
-                        <a href="../AdminHandler?action=viewReserveNeeds" class="btn btn-primary">View Reserve Needs</a>
-                        <a href="../ConsumptionHandler?action=view_consumptionRecords" class="btn btn-success">View Consumption Records</a>
-                        <a href="../AdminHandler?action=viewUserManagement" class="btn btn-warning">Manage Users</a>
-                        <a href="../AdminHandler?action=view_fruitManagement" class="btn btn-info">Manage Fruit Types</a>
+                    <h3 class="mb-4">Actions</h3>
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        <!-- View Reserve Needs -->
+                        <div class="col">
+                            <a href="../AdminHandler?action=viewReserveNeeds" class="text-decoration-none text-dark">
+                                <div class="card h-100 text-center bg-primary text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">View Reserve Needs</h5>
+                                        <p class="card-text">Check the reserve needs for fruits in the warehouse.</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- View Consumption Records -->
+                        <div class="col">
+                            <a href="../ConsumptionHandler?action=view_consumptionRecords" class="text-decoration-none text-dark">
+                                <div class="card h-100 text-center bg-success text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">View Consumption Records</h5>
+                                        <p class="card-text">View detailed records of fruit consumption.</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Manage Users -->
+                        <div class="col">
+                            <a href="../AdminHandler?action=viewUserManagement" class="text-decoration-none text-dark">
+                                <div class="card h-100 text-center bg-warning text-dark">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Manage Users</h5>
+                                        <p class="card-text">Add, edit, or remove users in the system.</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Manage Fruit Types -->
+                        <div class="col">
+                            <a href="../AdminHandler?action=view_fruitManagement" class="text-decoration-none text-dark">
+                                <div class="card h-100 text-center bg-info text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Manage Fruit Types</h5>
+                                        <p class="card-text">Add, edit, or remove fruit types in the system.</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Notifications Section -->
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">Notifications</h3>
-                    <ul class="list-group">
-                        <li class="list-group-item">New user account created: Warehouse Staff.</li>
-                        <li class="list-group-item">Reserve needs report for April is ready.</li>
-                        <li class="list-group-item">Consumption report for Q1 is available.</li>
-                    </ul>
-                </div>
             </div>
         </div>
 

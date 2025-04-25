@@ -43,68 +43,70 @@
                     <p class="card-text">Warehouse ID: <jsp:getProperty name="user" property="warehouseId"/></p>
                 </div>
             </div>
-            <div class="container mt-4">
-                <!-- Actions Section -->
-                <h3 class="mb-4">Actions</h3>
-                <div class="row row-cols-1 row-cols-md-3 g-4">
-                    <!-- View/Update Stock Levels -->
-                    <div class="col">
-                        <a href="../UpdateStockHandler?action=view_warehouse" class="text-decoration-none text-dark">
-                            <div class="card h-100 text-center bg-primary text-white">
-                                <div class="card-body">
-                                    <h5 class="card-title">View/Update Stock Levels</h5>
-                                    <p class="card-text">Manage and update stock levels in the warehouse.</p>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <!-- Actions Section -->
+                    <h3 class="mb-4">Actions</h3>
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        <!-- View/Update Stock Levels -->
+                        <div class="col">
+                            <a href="../UpdateStockHandler?action=view_warehouse" class="text-decoration-none text-dark">
+                                <div class="card h-100 text-center bg-primary text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">View/Update Stock Levels</h5>
+                                        <p class="card-text">Manage and update stock levels in the warehouse.</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
 
-                    <!-- Reserve Fruits -->
-                    <div class="col">
-                        <a href="../ReserveFruitsHandler?action=reserveFruit_warehouse" class="text-decoration-none text-dark">
-                            <div class="card h-100 text-center bg-secondary text-white">
-                                <div class="card-body">
-                                    <h5 class="card-title">Reserve Fruits</h5>
-                                    <p class="card-text">Reserve fruits for future use or special orders.</p>
+                        <!-- Reserve Fruits -->
+                        <div class="col">
+                            <a href="../ReserveFruitsHandler?action=reserveFruit_warehouse" class="text-decoration-none text-dark">
+                                <div class="card h-100 text-center bg-secondary text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Reserve Fruits</h5>
+                                        <p class="card-text">Reserve fruits for future use or special orders.</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
 
-                    <!-- Approve Reservations -->
-                    <div class="col">
-                        <a href="../ReserveFruitsHandler?action=view_warehouse" class="text-decoration-none text-dark">
-                            <div class="card h-100 text-center bg-success text-white">
-                                <div class="card-body">
-                                    <h5 class="card-title">Approve Reservations</h5>
-                                    <p class="card-text">Approve or reject fruit reservations from bakery shops.</p>
+                        <!-- Approve Reservations -->
+                        <div class="col">
+                            <a href="../ReserveFruitsHandler?action=view_warehouse" class="text-decoration-none text-dark">
+                                <div class="card h-100 text-center bg-success text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Approve Reservations</h5>
+                                        <p class="card-text">Approve or reject fruit reservations from bakery shops.</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
 
-                    <!-- Arrange Deliveries to Warehouse -->
-                    <div class="col">
-                        <a href="../DeliveriesHandler?action=view" class="text-decoration-none text-dark">
-                            <div class="card h-100 text-center bg-warning text-dark">
-                                <div class="card-body">
-                                    <h5 class="card-title">Arrange Deliveries to Warehouse</h5>
-                                    <p class="card-text">Organize deliveries of fruits to the warehouse.</p>
+                        <!-- Arrange Deliveries to Warehouse -->
+                        <div class="col">
+                            <a href="../DeliveriesHandler?action=view" class="text-decoration-none text-dark">
+                                <div class="card h-100 text-center bg-warning text-dark">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Arrange Deliveries to Warehouse</h5>
+                                        <p class="card-text">Organize deliveries of fruits to the warehouse.</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
 
-                    <!-- Arrange Deliveries to Bakery Shop -->
-                    <div class="col">
-                        <a href="../DeliveriesHandler?action=view_toShop" class="text-decoration-none text-dark">
-                            <div class="card h-100 text-center bg-info text-white">
-                                <div class="card-body">
-                                    <h5 class="card-title">Arrange Deliveries to Bakery Shop</h5>
-                                    <p class="card-text">Organize deliveries of fruits to bakery shops.</p>
+                        <!-- Arrange Deliveries to Bakery Shop -->
+                        <div class="col">
+                            <a href="../DeliveriesHandler?action=view_toShop" class="text-decoration-none text-dark">
+                                <div class="card h-100 text-center bg-info text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Arrange Deliveries to Bakery Shop</h5>
+                                        <p class="card-text">Organize deliveries of fruits to bakery shops.</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

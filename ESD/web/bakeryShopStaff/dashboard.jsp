@@ -115,82 +115,85 @@
             </div>
 
             <!-- Actions Section -->
-            <div class="container mt-4">
-                <h3 class="mb-4">Actions</h3>
-                <div class="row row-cols-1 row-cols-md-3 g-4">
-                    <!-- Reserve Fruits -->
-                    <div class="col">
-                        <a href="./ReserveFruitsHandler?action=view" class="text-decoration-none text-dark ">
-                            <div class="card h-100 text-center bg-primary text-white">
-                                <div class="card-body">
-                                    <h5 class="card-title">Reserve Fruits</h5>
-                                    <p class="card-text">Reserve fruits for future use or special orders.</p>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="mb-4">Actions</h3>
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        <!-- Reserve Fruits -->
+                        <div class="col">
+                            <a href="./ReserveFruitsHandler?action=view" class="text-decoration-none text-dark ">
+                                <div class="card h-100 text-center bg-primary text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Reserve Fruits</h5>
+                                        <p class="card-text">Reserve fruits for future use or special orders.</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
 
-                    <!-- Borrow Fruits -->
-                    <div class="col">
-                        <a href="./BorrowFruitsHandler?action=view" class="text-decoration-none text-dark">
-                            <div class="card h-100 text-center bg-secondary text-white">
-                                <div class="card-body">
-                                    <h5 class="card-title">Borrow Fruits</h5>
-                                    <p class="card-text">Request fruits from other shops when stock is low.</p>
+                        <!-- Borrow Fruits -->
+                        <div class="col">
+                            <a href="./BorrowFruitsHandler?action=view" class="text-decoration-none text-dark">
+                                <div class="card h-100 text-center bg-secondary text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Borrow Fruits</h5>
+                                        <p class="card-text">Request fruits from other shops when stock is low.</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
 
-                    <!-- Approve Borrow -->
-                    <div class="col">
-                        <a href="./BorrowFruitsHandler?action=view_borrow" class="text-decoration-none text-dark">
-                            <div class="card h-100 text-center bg-success text-white">
-                                <div class="card-body">
-                                    <h5 class="card-title">Approve Borrow</h5>
-                                    <p class="card-text">Approve or reject borrow requests from other shops.</p>
+                        <!-- Approve Borrow -->
+                        <div class="col">
+                            <a href="./BorrowFruitsHandler?action=view_borrow" class="text-decoration-none text-dark">
+                                <div class="card h-100 text-center bg-success text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Approve Borrow</h5>
+                                        <p class="card-text">Approve or reject borrow requests from other shops.</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
 
-                    <!-- View Reservations -->
-                    <div class="col">
-                        <a href="./ViewReservations" class="text-decoration-none text-dark">
-                            <div class="card h-100 text-center bg-warning text-black">
-                                <div class="card-body">
-                                    <h5 class="card-title">View Reservations</h5>
-                                    <p class="card-text">View all reserved fruits and their details.</p>
+                        <!-- View Reservations -->
+                        <div class="col">
+                            <a href="./ViewReservations" class="text-decoration-none text-dark">
+                                <div class="card h-100 text-center bg-warning text-black">
+                                    <div class="card-body">
+                                        <h5 class="card-title">View Reservations</h5>
+                                        <p class="card-text">View all reserved fruits and their details.</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
 
-                    <!-- Update Stock Levels -->
-                    <div class="col">
-                        <a href="./UpdateStockHandler?action=view" class="text-decoration-none text-dark">
-                            <div class="card h-100 text-center bg-info text-black">
-                                <div class="card-body">
-                                    <h5 class="card-title">Update Stock Levels</h5>
-                                    <p class="card-text">Update the stock levels for fruits in your shop.</p>
+                        <!-- Update Stock Levels -->
+                        <div class="col">
+                            <a href="./UpdateStockHandler?action=view" class="text-decoration-none text-dark">
+                                <div class="card h-100 text-center bg-info text-black">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Update Stock Levels</h5>
+                                        <p class="card-text">Update the stock levels for fruits in your shop.</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
 
-                    <!-- Upload Consumption -->
-                    <div class="col">
-                        <a href="./ConsumptionHandler?action=view" class="text-decoration-none text-dark">
-                            <div class="card h-100 text-center bg-dark text-white">
-                                <div class="card-body">
-                                    <h5 class="card-title">Upload Consumption</h5>
-                                    <p class="card-text">Upload fruit consumption data for tracking purposes.</p>
+                        <!-- Upload Consumption -->
+                        <div class="col">
+                            <a href="./ConsumptionHandler?action=view" class="text-decoration-none text-dark">
+                                <div class="card h-100 text-center bg-dark text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Upload Consumption</h5>
+                                        <p class="card-text">Upload fruit consumption data for tracking purposes.</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
         <!-- Bootstrap JS Bundle -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
