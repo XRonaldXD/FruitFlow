@@ -5,18 +5,19 @@
 package servlet;
 
 import bean.Reservation;
+import bean.User;
 import db.ReservationDB;
 import db.UserDB;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
-import models.ReserveReport;
+import bean.Fruit;
+import db.FruitManagementDB;
 
 /**
  *
@@ -26,6 +27,8 @@ import models.ReserveReport;
 public class AdminHandler extends HttpServlet {
 
     private ReservationDB reservationDB;
+    private UserDB userDB;
+    private FruitManagementDB fruitManagementDB;
 
     public void init() {
         String dbUrl = this.getServletContext().getInitParameter("dbUrl");
@@ -33,7 +36,8 @@ public class AdminHandler extends HttpServlet {
         String dbPassword = this.getServletContext().getInitParameter("dbPassword");
 
         reservationDB = new ReservationDB(dbUrl, dbUser, dbPassword);
-
+        userDB = new UserDB(dbUrl, dbUser, dbPassword);
+        fruitManagementDB = new FruitManagementDB(dbUrl, dbUser, dbPassword);
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -43,11 +47,79 @@ public class AdminHandler extends HttpServlet {
         if (action.equals("viewReserveNeeds")) {
 
             List<Reservation> reservations = reservationDB.getAllReservations();
-            
+
             request.setAttribute("reservations", reservations);
-            
+
             // Forward to the JSP
             RequestDispatcher dispatcher = request.getRequestDispatcher("./seniorManagement/reserveNeeds.jsp");
+            dispatcher.forward(request, response);
+        } else if (action.equals("viewUserManagement")) {
+
+            List<User> users = (List<User>) userDB.getAllUsers();
+            request.setAttribute("users", users);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./seniorManagement/userManagement.jsp");
+            dispatcher.forward(request, response);
+
+        } else if (action.equals("delete_userManagement")) {
+
+            // Get the user ID from the request
+            int userId = Integer.parseInt(request.getParameter("userId"));
+
+            // Call the DAO to delete the user
+            boolean success = userDB.deleteUser(userId);
+
+            // Fetch the updated list of users
+            List<User> users = userDB.getAllUsers();
+            request.setAttribute("users", users);
+
+            // Set a success or failure message
+            if (success) {
+                request.setAttribute("message", "User deleted successfully.");
+                request.setAttribute("alertType", "success");
+            } else {
+                request.setAttribute("message", "Failed to delete user.");
+                request.setAttribute("alertType", "warning");
+            }
+
+            // Forward to the user management JSP
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./seniorManagement/userManagement.jsp");
+            dispatcher.forward(request, response);
+        } else if (action.equals("view_fruitManagement")) {
+            List<Fruit> fruits = (List<Fruit>) fruitManagementDB.getAllFruits();
+            request.setAttribute("fruits", fruits);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./seniorManagement/fruitManagement.jsp");
+            dispatcher.forward(request, response);
+        } else if (action.equals("add_fruit")) {
+            String fruitName = request.getParameter("fruitName");
+            String sourceLocation = request.getParameter("sourceLocation");
+            boolean success = fruitManagementDB.addFruit(fruitName, sourceLocation);
+            if (success) {
+                request.setAttribute("message", "Fruit added successfully.");
+                request.setAttribute("alertType", "success");
+            } else {
+                request.setAttribute("message", "Failed to add fruit.");
+                request.setAttribute("alertType", "warning");
+            }
+            List<Fruit> fruits = (List<Fruit>) fruitManagementDB.getAllFruits();
+            request.setAttribute("fruits", fruits);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./seniorManagement/fruitManagement.jsp");
+            dispatcher.forward(request, response);
+        } else if (action.equals("update_fruit")) {
+            int fruitId = Integer.parseInt(request.getParameter("fruitId"));
+            String fruitName = request.getParameter("fruitName");
+            String sourceLocation = request.getParameter("sourceLocation");
+
+            boolean success = fruitManagementDB.updateFruit(fruitId, fruitName, sourceLocation);
+            if (success) {
+                request.setAttribute("message", "Fruit updated successfully.");
+                request.setAttribute("alertType", "success");
+            } else {
+                request.setAttribute("message", "Failed to update fruit.");
+                request.setAttribute("alertType", "warning");
+            }
+            List<Fruit> fruits = (List<Fruit>) fruitManagementDB.getAllFruits();
+            request.setAttribute("fruits", fruits);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./seniorManagement/fruitManagement.jsp");
             dispatcher.forward(request, response);
         }
     }

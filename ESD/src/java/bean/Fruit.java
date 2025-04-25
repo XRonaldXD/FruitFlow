@@ -12,16 +12,14 @@ public class Fruit {
     private int fruitId;
     private String fruitName;
     private String sourceLocation;
-    private int stockLevel;
 
     // Constructors
     public Fruit() {}
 
-    public Fruit(int fruitId, String fruitName, String sourceLocation, int stockLevel) {
+    public Fruit(int fruitId, String fruitName, String sourceLocation) {
         this.fruitId = fruitId;
         this.fruitName = fruitName;
         this.sourceLocation = sourceLocation;
-        this.stockLevel = stockLevel;
     }
 
     // Getters and Setters
@@ -33,7 +31,4 @@ public class Fruit {
 
     public String getSourceLocation() { return sourceLocation; }
     public void setSourceLocation(String sourceLocation) { this.sourceLocation = sourceLocation; }
-
-    public int getStockLevel() { return stockLevel; }
-    public void setStockLevel(int stockLevel) { this.stockLevel = stockLevel; }
 }

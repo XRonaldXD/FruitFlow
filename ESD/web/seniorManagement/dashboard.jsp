@@ -50,8 +50,8 @@
                     <div class="d-grid gap-2">
                         <a href="../AdminHandler?action=viewReserveNeeds" class="btn btn-primary">View Reserve Needs</a>
                         <a href="../ConsumptionHandler?action=view_consumptionRecords" class="btn btn-success">View Consumption Records</a>
-                        <a href="manageUsers.jsp" class="btn btn-warning">Manage Users</a>
-                        <a href="manageFruits.jsp" class="btn btn-info">Manage Fruit Types</a>
+                        <a href="../AdminHandler?action=viewUserManagement" class="btn btn-warning">Manage Users</a>
+                        <a href="../AdminHandler?action=view_fruitManagement" class="btn btn-info">Manage Fruit Types</a>
                     </div>
                 </div>
             </div>

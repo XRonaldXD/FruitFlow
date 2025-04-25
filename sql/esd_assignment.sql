@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1:3306
--- 產生時間： 2025-04-24 20:06:57
+-- 產生時間： 2025-04-25 09:44:27
 -- 伺服器版本： 8.2.0
 -- PHP 版本： 8.2.13
 
@@ -179,7 +179,7 @@ CREATE TABLE IF NOT EXISTS `fruits` (
   `source_location` varchar(50) NOT NULL,
   PRIMARY KEY (`fruit_id`),
   UNIQUE KEY `fruit_name` (`fruit_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 傾印資料表的資料 `fruits`
@@ -188,7 +188,9 @@ CREATE TABLE IF NOT EXISTS `fruits` (
 INSERT INTO `fruits` (`fruit_id`, `fruit_name`, `source_location`) VALUES
 (1, 'Apple', 'USA'),
 (2, 'Banana', 'Philippines'),
-(3, 'Strawberry', 'Japan');
+(3, 'Strawberry', 'Japan'),
+(4, 'HongKongPotato', 'HK'),
+(5, 'Tomato', 'India');
 
 -- --------------------------------------------------------
 
@@ -317,7 +319,6 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `role`, `shop_id`, `warehouse_id`) VALUES
 (1, 'Ronald Sham', 'RonaldSham@gmail.com', '12345678', 'BakeryShopStaff', 1, NULL),
 (4, 'Chim Sir', 'ChimSir@gmail.com', '246810', 'WarehouseStaff', NULL, 1),
-(5, 'Annie Sham', 'AnnieSham@gmail.com', '1357911', 'BakeryShopStaff', 3, NULL),
 (6, 'admin', 'admin@admin.com', 'admin', 'SeniorManagement', NULL, NULL);
 
 -- --------------------------------------------------------

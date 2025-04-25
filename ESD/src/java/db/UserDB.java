@@ -7,6 +7,8 @@ package db;
 import bean.User;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDB {
 
@@ -142,6 +144,32 @@ public class UserDB {
         return user;
     }
 
+    public List<User> getAllUsers() {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT * FROM users";
+
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                int userId = rs.getInt("user_id");
+                String username = rs.getString("username");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String role = rs.getString("role");
+                Integer shop_id = rs.getInt("shop_id");
+                Integer warehouse_id = rs.getInt("warehouse_id");
+
+                users.add(new User(userId, username, email, password, role, shop_id, warehouse_id));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return users;
+    }
+
     public int createUser(String username, String email, String password, String role, Integer ID) {
         Connection conn = null;
         PreparedStatement pStmt = null;
@@ -153,7 +181,7 @@ public class UserDB {
             conn = getConnection();
             if (role.equals("BakeryShopStaff")) {
                 sql = "INSERT INTO `users` (`username`, `email`, `password`, `role`, `shop_id`) VALUES (?, ?, ?, ?, ?);";
-            }else if (role.equals("WarehouseStaff")){
+            } else if (role.equals("WarehouseStaff")) {
                 sql = "INSERT INTO `users` (`username`, `email`, `password`, `role`, `warehouse_id`) VALUES (?, ?, ?, ?, ?);";
             }
 
@@ -164,7 +192,6 @@ public class UserDB {
             pStmt.setString(3, password);
             pStmt.setString(4, role);
             pStmt.setInt(5, ID);
-
 
             int rowCount = pStmt.executeUpdate();
             System.out.println("Rows affected: " + rowCount);
@@ -199,5 +226,23 @@ public class UserDB {
             }
         }
         return userID; // Return the userID or -1 if creation failed
+    }
+
+    public boolean deleteUser(int userId) {
+        String sql = "DELETE FROM users WHERE user_id = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+
+            int rowsDeleted = stmt.executeUpdate();
+            return rowsDeleted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException ex){
+            ex.printStackTrace();
+            return false;
+        }
     }
 }
