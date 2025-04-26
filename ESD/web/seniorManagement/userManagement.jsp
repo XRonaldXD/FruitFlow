@@ -4,6 +4,8 @@
     Author     : user
 --%>
 
+<%@page import="bean.Warehouse"%>
+<%@page import="models.Shop"%>
 <%@page import="java.util.List"%>
 <%@page import="bean.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -63,6 +65,83 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <% } %>
+            <!-- Add User Form -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title">Add User</h3>
+                    <form action="AdminHandler" method="POST">
+                        <input type="hidden" name="action" value="addUser">
+
+                        <!-- Username -->
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+
+                        <!-- Role -->
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Role</label>
+                            <select class="form-select" id="role" name="role" required onchange="toggleIdFields()">
+                                <option value="">Select Role</option>
+                                <option value="BakeryShopStaff">Bakery Shop Staff</option>
+                                <option value="WarehouseStaff">Warehouse Staff</option>
+                                <option value="SeniorManagement">Senior Management</option>
+                            </select>
+                        </div>
+
+                        <!-- Shop ID (for BakeryShopStaff) -->
+                        <div class="mb-3" id="shopIdField" style="display: none;">
+                            <label for="shopId" class="form-label">Shop ID</label>
+                            <select class="form-select" id="shopId" name="shopId">
+                                <option value="">Select Shop</option>
+                                <%
+                                    List<Shop> shops = (List<Shop>) request.getAttribute("shops");
+                                    if (shops != null) {
+                                        for (Shop shop : shops) {
+                                %>
+                                <option value="<%= shop.getShopId()%>"><%= shop.getShopName()%></option>
+                                <%
+                                        }
+                                    }
+                                %>
+                            </select>
+                        </div>
+
+                        <!-- Warehouse ID (for WarehouseStaff) -->
+                        <div class="mb-3" id="warehouseIdField" style="display: none;">
+                            <label for="warehouseId" class="form-label">Warehouse ID</label>
+                            <select class="form-select" id="warehouseId" name="warehouseId" >
+                                <option value="">Select Warehouse</option>
+                                <%
+                                    List<Warehouse> warehouses = (List<Warehouse>) request.getAttribute("warehouses");
+                                    if (warehouses != null) {
+                                        for (Warehouse warehouse : warehouses) {
+                                %>
+                                <option value="<%= warehouse.getWarehouseId()%>"><%= warehouse.getWarehouseName()%></option>
+                                <%
+                                        }
+                                    }
+                                %>
+                            </select>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary">Add User</button>
+                    </form>
+                </div>
+            </div>
             <!-- User Table -->
             <table class="table table-striped" id="userTable">
                 <thead>
@@ -107,7 +186,33 @@
 
         <!-- Bootstrap JS Bundle -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- JavaScript to Toggle Shop/Warehouse Fields -->
+        <script>
+                                function toggleIdFields() {
+                                    const role = document.getElementById("role").value;
+                                    const shopIdField = document.getElementById("shopIdField");
+                                    const warehouseIdField = document.getElementById("warehouseIdField");
+                                    const shopIdSelect = document.getElementById("shopId");
+                                    const warehouseIdSelect = document.getElementById("warehouseId");
 
+                                    if (role === "BakeryShopStaff") {
+                                        shopIdField.style.display = "block";
+                                        warehouseIdField.style.display = "none";
+                                        shopIdSelect.setAttribute("required", "required");
+                                        warehouseIdSelect.removeAttribute("required");
+                                    } else if (role === "WarehouseStaff") {
+                                        shopIdField.style.display = "none";
+                                        warehouseIdField.style.display = "block";
+                                        warehouseIdSelect.setAttribute("required", "required");
+                                        shopIdSelect.removeAttribute("required");
+                                    } else {
+                                        shopIdField.style.display = "none";
+                                        warehouseIdField.style.display = "none";
+                                        shopIdSelect.removeAttribute("required");
+                                        warehouseIdSelect.removeAttribute("required");
+                                    }
+                                }
+        </script>
         <!-- jQuery Script for Search -->
         <script>
             $(document).ready(function () {

@@ -17,7 +17,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import bean.Fruit;
+import bean.Warehouse;
 import db.FruitManagementDB;
+import db.ShopDB;
+import db.WarehouseDB;
+import models.Shop;
 
 /**
  *
@@ -29,6 +33,8 @@ public class AdminHandler extends HttpServlet {
     private ReservationDB reservationDB;
     private UserDB userDB;
     private FruitManagementDB fruitManagementDB;
+    private ShopDB shopDB;
+    private WarehouseDB warehouseDB;
 
     public void init() {
         String dbUrl = this.getServletContext().getInitParameter("dbUrl");
@@ -38,6 +44,9 @@ public class AdminHandler extends HttpServlet {
         reservationDB = new ReservationDB(dbUrl, dbUser, dbPassword);
         userDB = new UserDB(dbUrl, dbUser, dbPassword);
         fruitManagementDB = new FruitManagementDB(dbUrl, dbUser, dbPassword);
+        shopDB = new ShopDB(dbUrl, dbUser, dbPassword);
+        warehouseDB = new WarehouseDB(dbUrl, dbUser, dbPassword);
+
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -56,10 +65,56 @@ public class AdminHandler extends HttpServlet {
         } else if (action.equals("viewUserManagement")) {
 
             List<User> users = (List<User>) userDB.getAllUsers();
+            List<Shop> shops = shopDB.getAllShops();
+            List<Warehouse> warehouses = warehouseDB.getAllWarehouses();
             request.setAttribute("users", users);
+            request.setAttribute("shops", shops);
+            request.setAttribute("warehouses", warehouses);
             RequestDispatcher dispatcher = request.getRequestDispatcher("./seniorManagement/userManagement.jsp");
             dispatcher.forward(request, response);
 
+        } else if (action.equals("addUser")) {
+            // Retrieve parameters from the request
+            String username = request.getParameter("username");
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+            String role = request.getParameter("role");
+            String shopId = request.getParameter("shopId");
+            String warehouseId = request.getParameter("warehouseId");
+
+            // Validate inputs
+            if (username == null || email == null || password == null || role == null || username.isEmpty() || email.isEmpty() || password.isEmpty() || role.isEmpty()) {
+                request.setAttribute("message", "All fields are required.");
+                request.setAttribute("alertType", "danger");
+            } else {
+                // Determine the ID to assign based on the role
+                Integer id = null;
+                if (role.equals("BakeryShopStaff")) {
+                    id = (shopId != null && !shopId.isEmpty()) ? Integer.parseInt(shopId) : null;
+                } else if (role.equals("WarehouseStaff")) {
+                    id = (warehouseId != null && !warehouseId.isEmpty()) ? Integer.parseInt(warehouseId) : null;
+                }
+
+                // Call the createUser method in UserDB
+                int userId = userDB.createUser(username, email, password, role, id);
+
+                // Set success or failure message
+                if (userId != -1) {
+                    request.setAttribute("message", "User added successfully. User ID: " + userId);
+                    request.setAttribute("alertType", "success");
+                } else {
+                    request.setAttribute("message", "Failed to add user.");
+                    request.setAttribute("alertType", "danger");
+                }
+            }
+
+            // Fetch the updated list of users
+            List<User> users = userDB.getAllUsers();
+            request.setAttribute("users", users);
+
+            // Forward to the user management JSP
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./seniorManagement/userManagement.jsp");
+            dispatcher.forward(request, response);
         } else if (action.equals("delete_userManagement")) {
 
             // Get the user ID from the request

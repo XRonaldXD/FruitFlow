@@ -4,11 +4,14 @@
  */
 package db;
 
+import bean.Warehouse;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -25,13 +28,33 @@ public class WarehouseDB {
         this.dbUser = dbUser;
         this.dbPassword = dbPassword;
     }
-    
+
     // Get database connection
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(dbUrl, dbUser, dbPassword);
     }
-    
-    public String getWarehouseNameById(int warehouse_id){
+
+    public List<Warehouse> getAllWarehouses() {
+        List<Warehouse> warehouses = new ArrayList<>();
+        String sql = "SELECT * FROM warehouses";
+
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Warehouse warehouse = new Warehouse();
+                warehouse.setWarehouseId(rs.getInt("warehouse_id"));
+                warehouse.setWarehouseName(rs.getString("warehouse_name"));
+                warehouse.setCountryId(rs.getInt("country_id"));
+                warehouses.add(warehouse);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return warehouses;
+    }
+
+    public String getWarehouseNameById(int warehouse_id) {
         String warehouse_name = null;
         String sql = "SELECT warehouse_name FROM warehouses WHERE warehouse_id = ?";
 
