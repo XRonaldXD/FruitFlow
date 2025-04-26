@@ -86,7 +86,8 @@ public class BorrowFruitsHandler extends HttpServlet {
                 request.setAttribute("message", "Failed to submit borrow request. Please try again.");
                 request.setAttribute("alertType", "danger"); // Bootstrap alert type
             }
-
+            List<Borrow> borrows = borrowDB.getBorrowRequestsByToShopId(toShopId); // Fetch current borrows
+            request.setAttribute("borrows", borrows);
 // Forward the request back to the same page
             RequestDispatcher dispatcher = request.getRequestDispatcher("./bakeryShopStaff/borrowFruits.jsp");
             dispatcher.forward(request, response);
