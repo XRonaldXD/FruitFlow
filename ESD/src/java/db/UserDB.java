@@ -240,6 +240,43 @@ public class UserDB {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateUser(int userId, String username, String email, String password, String role, Integer id) {
+        String sql = "";
+        if (role.equals("BakeryShopStaff")) {
+            sql = "UPDATE users SET username = ?, email = ?, password = ?, role = ?, shop_id = ?, warehouse_id = NULL WHERE user_id = ?";
+        } else if (role.equals("WarehouseStaff")) {
+            sql = "UPDATE users SET username = ?, email = ?, password = ?, role = ?, shop_id = NULL, warehouse_id = ? WHERE user_id = ?";
+        } else if (role.equals("SeniorManagement")) {
+            sql = "UPDATE users SET username = ?, email = ?, password = ?, role = ?, shop_id = NULL, warehouse_id = NULL WHERE user_id = ?";
+        }
+
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, username);
+            stmt.setString(2, email);
+            stmt.setString(3, password); // Set the password (should be hashed in a real application)
+            stmt.setString(4, role);
+
+            if (role.equals("BakeryShopStaff")) {
+                stmt.setObject(5, id, Types.INTEGER);
+                stmt.setInt(6, userId);
+            } else if (role.equals("WarehouseStaff")) {
+                stmt.setObject(5, id, Types.INTEGER);
+                stmt.setInt(6, userId);
+            } else if (role.equals("SeniorManagement")) {
+                stmt.setInt(5, userId);
+            }
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         } catch (IOException ex){
             ex.printStackTrace();
             return false;

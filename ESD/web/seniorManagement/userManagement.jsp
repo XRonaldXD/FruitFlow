@@ -174,12 +174,97 @@
                                 <input type="hidden" name="userId" value="<%= user.getUserId()%>">
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>
+
+                            <!-- Edit Button -->
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editUserModal<%= user.getUserId()%>">
+                                Edit
+                            </button>
                         </td>
                     </tr>
-                    <%
-                            }
+                    <!-- Edit User Modal -->
+                <div class="modal fade" id="editUserModal<%= user.getUserId()%>" tabindex="-1" aria-labelledby="editUserModalLabel<%= user.getUserId()%>" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editUserModalLabel<%= user.getUserId()%>">Edit User</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form action="AdminHandler" method="POST">
+                                <div class="modal-body">
+                                    <input type="hidden" name="action" value="edit_userManagement">
+                                    <input type="hidden" name="userId" value="<%= user.getUserId()%>">
+
+                                    <!-- Username -->
+                                    <div class="mb-3">
+                                        <label for="username<%= user.getUserId()%>" class="form-label">Username</label>
+                                        <input type="text" class="form-control" id="username<%= user.getUserId()%>" name="username" value="<%= user.getUsername()%>" required>
+                                    </div>
+
+                                    <!-- Password -->
+                                    <div class="mb-3">
+                                        <label for="password<%= user.getUserId()%>" class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="password<%= user.getUserId()%>" name="password" value="<%= user.getPassword()%>" required>
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="mb-3">
+                                        <label for="email<%= user.getUserId()%>" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email<%= user.getUserId()%>" name="email" value="<%= user.getEmail()%>" required>
+                                    </div>
+
+                                    <!-- Role -->
+                                    <div class="mb-3">
+                                        <label for="role<%= user.getUserId()%>" class="form-label">Role</label>
+                                        <select class="form-select" id="role<%= user.getUserId()%>" name="role" required onchange="toggleEditIdFields(<%= user.getUserId()%>)">
+                                            <option value="BakeryShopStaff" <%= user.getRole().equals("BakeryShopStaff") ? "selected" : ""%>>Bakery Shop Staff</option>
+                                            <option value="WarehouseStaff" <%= user.getRole().equals("WarehouseStaff") ? "selected" : ""%>>Warehouse Staff</option>
+                                            <option value="SeniorManagement" <%= user.getRole().equals("SeniorManagement") ? "selected" : ""%>>Senior Management</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Shop ID -->
+                                    <div class="mb-3" id="editShopIdField<%= user.getUserId()%>" style="<%= user.getRole().equals("BakeryShopStaff") ? "" : "display:none;"%>">
+                                        <label for="shopId<%= user.getUserId()%>" class="form-label">Shop ID</label>
+                                        <input type="number" class="form-control" id="shopId<%= user.getUserId()%>" name="shopId" value="<%= user.getShopId() != 0 ? user.getShopId() : ""%>">
+                                    </div>
+
+                                    <!-- Warehouse ID -->
+                                    <div class="mb-3" id="editWarehouseIdField<%= user.getUserId()%>" style="<%= user.getRole().equals("WarehouseStaff") ? "" : "display:none;"%>">
+                                        <label for="warehouseId<%= user.getUserId()%>" class="form-label">Warehouse ID</label>
+                                        <input type="number" class="form-control" id="warehouseId<%= user.getUserId()%>" name="warehouseId" value="<%= user.getWarehouseId() != 0 ? user.getWarehouseId() : ""%>">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    function toggleEditIdFields(userId) {
+                        const role = document.getElementById("role" + userId).value;
+                        const shopIdField = document.getElementById("editShopIdField" + userId);
+                        const warehouseIdField = document.getElementById("editWarehouseIdField" + userId);
+
+                        if (role === "BakeryShopStaff") {
+                            shopIdField.style.display = "block";
+                            warehouseIdField.style.display = "none";
+                        } else if (role === "WarehouseStaff") {
+                            shopIdField.style.display = "none";
+                            warehouseIdField.style.display = "block";
+                        } else {
+                            shopIdField.style.display = "none";
+                            warehouseIdField.style.display = "none";
                         }
-                    %>
+                    }
+                </script>
+                <%
+                        }
+                    }
+                %>
                 </tbody>
             </table>
         </div>
@@ -188,30 +273,30 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
         <!-- JavaScript to Toggle Shop/Warehouse Fields -->
         <script>
-                                function toggleIdFields() {
-                                    const role = document.getElementById("role").value;
-                                    const shopIdField = document.getElementById("shopIdField");
-                                    const warehouseIdField = document.getElementById("warehouseIdField");
-                                    const shopIdSelect = document.getElementById("shopId");
-                                    const warehouseIdSelect = document.getElementById("warehouseId");
+                    function toggleIdFields() {
+                        const role = document.getElementById("role").value;
+                        const shopIdField = document.getElementById("shopIdField");
+                        const warehouseIdField = document.getElementById("warehouseIdField");
+                        const shopIdSelect = document.getElementById("shopId");
+                        const warehouseIdSelect = document.getElementById("warehouseId");
 
-                                    if (role === "BakeryShopStaff") {
-                                        shopIdField.style.display = "block";
-                                        warehouseIdField.style.display = "none";
-                                        shopIdSelect.setAttribute("required", "required");
-                                        warehouseIdSelect.removeAttribute("required");
-                                    } else if (role === "WarehouseStaff") {
-                                        shopIdField.style.display = "none";
-                                        warehouseIdField.style.display = "block";
-                                        warehouseIdSelect.setAttribute("required", "required");
-                                        shopIdSelect.removeAttribute("required");
-                                    } else {
-                                        shopIdField.style.display = "none";
-                                        warehouseIdField.style.display = "none";
-                                        shopIdSelect.removeAttribute("required");
-                                        warehouseIdSelect.removeAttribute("required");
-                                    }
-                                }
+                        if (role === "BakeryShopStaff") {
+                            shopIdField.style.display = "block";
+                            warehouseIdField.style.display = "none";
+                            shopIdSelect.setAttribute("required", "required");
+                            warehouseIdSelect.removeAttribute("required");
+                        } else if (role === "WarehouseStaff") {
+                            shopIdField.style.display = "none";
+                            warehouseIdField.style.display = "block";
+                            warehouseIdSelect.setAttribute("required", "required");
+                            shopIdSelect.removeAttribute("required");
+                        } else {
+                            shopIdField.style.display = "none";
+                            warehouseIdField.style.display = "none";
+                            shopIdSelect.removeAttribute("required");
+                            warehouseIdSelect.removeAttribute("required");
+                        }
+                    }
         </script>
         <!-- jQuery Script for Search -->
         <script>

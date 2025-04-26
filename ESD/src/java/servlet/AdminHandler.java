@@ -115,6 +115,43 @@ public class AdminHandler extends HttpServlet {
             // Forward to the user management JSP
             RequestDispatcher dispatcher = request.getRequestDispatcher("./seniorManagement/userManagement.jsp");
             dispatcher.forward(request, response);
+        } else if (action.equals("edit_userManagement")) {
+            // Edit User Logic
+            int userId = Integer.parseInt(request.getParameter("userId"));
+            String username = request.getParameter("username");
+            String email = request.getParameter("email");
+            String password = request.getParameter("password"); // Retrieve the password
+            String role = request.getParameter("role");
+            String shopId = request.getParameter("shopId");
+            String warehouseId = request.getParameter("warehouseId");
+
+            // Determine the ID to assign based on the role
+            Integer id = null;
+            if (role.equals("BakeryShopStaff")) {
+                id = (shopId != null && !shopId.isEmpty()) ? Integer.parseInt(shopId) : null;
+            } else if (role.equals("WarehouseStaff")) {
+                id = (warehouseId != null && !warehouseId.isEmpty()) ? Integer.parseInt(warehouseId) : null;
+            }
+
+            // Call the updateUser method in UserDB
+            boolean success = userDB.updateUser(userId, username, email, password, role, id);
+
+            // Set success or failure message
+            if (success) {
+                request.setAttribute("message", "User updated successfully.");
+                request.setAttribute("alertType", "success");
+            } else {
+                request.setAttribute("message", "Failed to update user.");
+                request.setAttribute("alertType", "danger");
+            }
+
+            // Fetch the updated list of users
+            List<User> users = userDB.getAllUsers();
+            request.setAttribute("users", users);
+
+            // Forward to the user management JSP
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./seniorManagement/userManagement.jsp");
+            dispatcher.forward(request, response);
         } else if (action.equals("delete_userManagement")) {
 
             // Get the user ID from the request
